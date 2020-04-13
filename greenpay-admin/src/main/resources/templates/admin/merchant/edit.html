@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>添加商户 - GreenPay</title>
+    <th:block th:replace="admin/header::stylesheet" />
+</head>
+<body class="layui-layout-body">
+<div class="layadmin-tabspage-none">
+    <div class="layui-layout layui-layout-admin">
+        <div th:replace="admin/header::nav"></div>
+        <div th:replace="admin/side::menu"></div>
+        <div class="layui-body">
+            <div class="layadmin-tabsbody-item layui-show">
+                <div th:replace="admin/compose::layui-breadcrumb('商户管理','添加商户')"></div>
+                <div class="layui-fluid">
+                    <div class="layui-card">
+                        <div class="layui-card-header">添加商户</div>
+                        <div class="layui-card-body">
+                            <form class="layui-form" action="">
+                                <div class="layui-row layui-form-item">
+                                    <label for="username" class="layui-form-label">用户名：</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" class="layui-input"
+                                               name="username" id="username"
+                                               lay-verify="title" autocomplete="off"
+                                               placeholder="请输入用户名">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label for="merchantName" class="layui-form-label">商户名称：</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" class="layui-input"
+                                               name="merchantName" id="merchantName"
+                                               lay-verify="title" autocomplete="off"
+                                               placeholder="请输入商户名称">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label for="email" class="layui-form-label">电子邮箱：</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" class="layui-input"
+                                               name="email" id="email"
+                                               lay-verify="title" autocomplete="off"
+                                               placeholder="请输入电子邮箱">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label for="password" class="layui-form-label">登录密码：</label>
+                                    <div class="layui-input-block">
+                                        <input type="password" class="layui-input"
+                                               name="password" id="password"
+                                               lay-verify="title" autocomplete="off"
+                                               placeholder="请设置登录密码">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label for="status" class="layui-form-label">状态：</label>
+                                    <div class="layui-input-block">
+                                        <input th:name="status" id="status" type="checkbox" name="switch" lay-skin="switch">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layadmin-body-shade" layadmin-event="shade"></div>
+    </div>
+</div>
+<th:block th:replace="admin/footer::script"/>
+<script th:inline="none">
+    !function(){
+        let layer = layui.layer
+            ,table = layui.table;
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            ,url: '/admin/api/products' //数据接口
+            ,page: true //开启分页
+            ,parseData: function(res){ //res 即为原始返回的数据
+                return {
+                    "code": 0,
+                    "msg": res.message,
+                    "count": res.total,
+                    "data": res.records
+                };
+            }
+            ,request: {
+                pageName: 'current'
+                ,limitName: 'size'
+            }
+            ,cols: [[ //表头
+                {type: 'checkbox', fixed: 'left'}
+                ,{field: 'id', title: 'ID',width:100, unresize:true}
+                ,{field: 'productTitle', title: '产品标题', width:250, unresize:true}
+                ,{align: 'right', field: 'costPriceVal', title: '成本价/美元', width:150, unresize:true}
+                ,{align: 'right', field: 'priceVal', title: '售价/美元', width:150, unresize:true}
+                ,{field: 'countryName', title: '国家', width:250, unresize:true}
+                ,{field: 'providerName', title: '提供商', width:250, unresize:true}
+                ,{field: 'createdAt', title: '创建时间', width:180, unresize:true}
+                ,{field: 'updatedAt', title: '更新时间', width:180, unresize:true}
+                ,{fixed:'right',align: 'center', toolbar: '#barDemo', width:120}
+            ]]
+        });
+    }();
+</script>
+
+</body>
+</html>

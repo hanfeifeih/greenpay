@@ -1,0 +1,22 @@
+server:
+  port: 8081
+
+logging:
+  level:
+    com.github.binarywang.wxpay: error
+    me.chanjar.weixin: error
+
+spring:
+  profiles:
+    active: dev
+  mvc:
+    static-path-pattern: /**
+
+wechat:
+  app_id: wx2aeda339f56138bf
+  app_secret: 731787f51247a33c4ff210cd613dd780
+  mch_id: 1519342911
+  mch_key: 2624eedd356624bc7a662c29ceb0a20e
+
+
+

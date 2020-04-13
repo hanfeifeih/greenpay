@@ -1,0 +1,30 @@
+.analysis-card {
+    padding: 10px;
+}
+.analysis-card-total {
+    height: 38px;
+    margin-top: 4px;
+    margin-bottom: 0;
+    overflow: hidden;
+    color: rgba(0,0,0,.85);
+    font-size: 30px;
+    line-height: 38px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: break-all;
+}
+.admin-table_header {
+    padding: 10px;
+}
+.admin-table_header_left {
+    display: inline-block;
+}
+.admin-table_header_right {
+    float: right;
+}
+.admin-table_header .layui-form-item {
+    margin-bottom: 0!important;
+}
+.admin-table_header .layui-form-item .layui-inline {
+    margin-bottom: 0!important;
+}

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>管理后台 - GreenPay</title>
+    <th:block th:replace="admin/header::stylesheet" />
+</head>
+<body class="layui-layout-body">
+<div class="layadmin-tabspage-none">
+    <div class="layui-layout layui-layout-admin">
+        <div th:replace="admin/header::nav"></div>
+        <div th:replace="admin/side::menu"></div>
+        <div class="layui-body">
+            <div class="layadmin-tabsbody-item layui-show">
+                <div class="layui-fluid">
+                    <div class="layui-row">
+                        <div class="layui-col-md4" style="padding: 10px 20px;">
+                            <div class="layui-card analysis-card">
+                                <div class="layui-card-body analysis-card-body">
+                                    <div class="analysis-card-meta">
+                                        <span>会员总数</span>
+                                    </div>
+                                    <div class="analysis-card-total">
+                                        <span>¥ 126,560</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4" style="padding: 10px 20px;">
+                            <div class="layui-card analysis-card">
+                                <div class="layui-card-body analysis-card-body">
+                                    <div class="analysis-card-meta">
+                                        <span>今日销售总额</span>
+                                    </div>
+                                    <div class="analysis-card-total">
+                                        <span>¥ 126,560</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4" style="padding: 10px 20px;">
+                            <div class="layui-card analysis-card">
+                                <div class="layui-card-body analysis-card-body">
+                                    <div class="analysis-card-meta">
+                                        <span>今日订单总数</span>
+                                    </div>
+                                    <div class="analysis-card-total">
+                                        <span>123456</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row">
+                        <div class="layui-col-md12" style="padding: 10px 20px;">
+                            <div class="layui-card">
+                                <div class="layui-card-header">七日订单数据</div>
+                                <div class="layui-card-body">
+                                    <div id="main" style="width: 100%; height: 250px"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="layadmin-body-shade" layadmin-event="shade"></div>
+    </div>
+</div>
+<th:block th:replace="admin/footer::script"/>
+<script>
+    !function () {
+        let myChart = echarts.init(document.getElementById('main'));
+        let option = {
+            grid: {
+                left: '2%',
+                right: '2%',
+                top: '5%',
+                bottom: '10%'
+            },
+            xAxis: {
+                type: 'category',
+                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Sun', 'Sun', 'Sun', 'Sun', 'Sun']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: [820, 932, 901, 934, 1290, 1330, 1320, 1320, 1320, 1320, 1320, 1320],
+                type: 'line',
+                radius: '100%'
+            }]
+        };
+        myChart.setOption(option);
+    }();
+</script>
+<script>
+    !function(){
+        let layer = layui.layer
+            ,form = layui.form;
+        layer.msg('Hello World');
+    }();
+</script>
+
+</body>
+</html>
