@@ -8,7 +8,7 @@ logging:
 
 spring:
   profiles:
-    active: dev
+    active: dev_home
   mvc:
     static-path-pattern: /**
 

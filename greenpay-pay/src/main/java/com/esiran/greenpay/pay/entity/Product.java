@@ -43,7 +43,7 @@ public class Product extends BaseMapperEntity {
     /**
      * 支付接口模式（1：单独，2：轮询）
      */
-    private Boolean interfaceMode;
+    private Integer interfaceMode;
 
     /**
      * 默认通道ID

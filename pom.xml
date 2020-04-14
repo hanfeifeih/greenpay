@@ -15,6 +15,8 @@
         <module>greenpay-merchant</module>
         <module>greenpay-common</module>
         <module>greenpay-system</module>
+        <module>greenpay-openapi</module>
+        <module>greenpay-actuator</module>
 
     </modules>
     <parent>
@@ -65,6 +67,11 @@
             <dependency>
                 <groupId>com.esiran</groupId>
                 <artifactId>greenpay-system</artifactId>
+                <version>${greenpay.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.esiran</groupId>
+                <artifactId>greenpay-openapi</artifactId>
                 <version>${greenpay.version}</version>
             </dependency>
             <dependency>

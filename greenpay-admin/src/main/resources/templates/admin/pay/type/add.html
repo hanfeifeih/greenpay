@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>结算设置 - GreenPay</title>
+    <title>支付类型 - GreenPay</title>
     <th:block th:replace="admin/header::stylesheet" />
 </head>
 <body class="layui-layout-body">
@@ -11,25 +11,47 @@
         <div th:replace="admin/side::menu"></div>
         <div class="layui-body">
             <div class="layadmin-tabsbody-item layui-show">
-                <div th:replace="admin/compose::layui-breadcrumb('商户管理','结算设置')"></div>
+                <div th:replace="admin/compose::layui-breadcrumb('支付配置','支付类型')"></div>
                 <div class="layui-fluid">
                     <div class="layui-card">
-                        <div class="layui-card-header">结算设置</div>
+                        <div class="layui-card-header">添加支付类型</div>
                         <div class="layui-card-body">
                             <form class="layui-form" action="">
                                 <div class="layui-row layui-form-item">
-                                    <label for="username" class="layui-form-label">用户名：</label>
+                                    <label for="payTypeCode" class="layui-form-label">类型编码：</label>
                                     <div class="layui-input-block">
                                         <input type="text" class="layui-input"
-                                               name="username" id="username"
-                                               lay-verify="title" autocomplete="off"
-                                               placeholder="请输入用户名">
+                                               name="payTypeCode" id="payTypeCode"
+                                               autocomplete="off"
+                                               placeholder="请输入类型编码">
                                     </div>
                                 </div>
-
+                                <div class="layui-row layui-form-item">
+                                    <label for="payTypeName" class="layui-form-label">类型名称：</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" class="layui-input"
+                                               name="payTypeName" id="payTypeName"
+                                               autocomplete="off"
+                                               placeholder="请输入类型名称">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label for="type" class="layui-form-label">类别：</label>
+                                    <div class="layui-input-block">
+                                        <input id="type" type="radio" name="type" value="1" title="支付" checked>
+                                        <input type="radio" name="type" value="2" title="代付">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label for="status" class="layui-form-label">状态：</label>
+                                    <div class="layui-input-block">
+                                        <input id="status" type="radio" name="status" value="0" title="关闭" checked>
+                                        <input type="radio" name="status" value="2" title="开启">
+                                    </div>
+                                </div>
                                 <div class="layui-form-item">
                                     <div class="layui-input-block">
-                                        <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                                        <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">提交</button>
                                     </div>
                                 </div>
                             </form>

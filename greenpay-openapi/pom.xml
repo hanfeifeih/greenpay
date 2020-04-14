@@ -9,16 +9,30 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>greenpay-merchant</artifactId>
+    <artifactId>greenpay-openapi</artifactId>
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.esiran</groupId>
             <artifactId>greenpay-common</artifactId>
         </dependency>
         <dependency>
             <groupId>com.esiran</groupId>
+            <artifactId>greenpay-merchant</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.esiran</groupId>
             <artifactId>greenpay-pay</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.esiran</groupId>
+            <artifactId>greenpay-system</artifactId>
+        </dependency>
     </dependencies>
+
 
 </project>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>重置密码 - GreenPay</title>
+    <title>支付类型 - GreenPay</title>
     <th:block th:replace="admin/header::stylesheet" />
 </head>
 <body class="layui-layout-body">
@@ -11,42 +11,47 @@
         <div th:replace="admin/side::menu"></div>
         <div class="layui-body">
             <div class="layadmin-tabsbody-item layui-show">
-                <div th:replace="admin/compose::layui-breadcrumb('商户管理','重置密码')"></div>
+                <div th:replace="admin/compose::layui-breadcrumb('支付配置','支付类型')"></div>
                 <div class="layui-fluid">
                     <div class="layui-card">
-                        <div class="layui-card-header">重置密码</div>
+                        <div class="layui-card-header">编辑支付类型</div>
                         <div class="layui-card-body">
                             <form class="layui-form" action="">
                                 <div class="layui-row layui-form-item">
-                                    <label for="username" class="layui-form-label">用户名：</label>
+                                    <label for="payTypeCode" class="layui-form-label">类型编码：</label>
                                     <div class="layui-input-block">
                                         <input type="text" class="layui-input"
-                                               name="username" id="username"
-                                               lay-verify="title" autocomplete="off"
-                                               placeholder="请输入用户名">
+                                               id="payTypeCode"
+                                               autocomplete="off"
+                                               placeholder="请输入类型编码">
+                                    </div>
+                                </div>
+                                <div class="layui-row layui-form-item">
+                                    <label for="payTypeName" class="layui-form-label">类型名称：</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" class="layui-input"
+                                               name="payTypeName" id="payTypeName"
+                                               autocomplete="off"
+                                               placeholder="请输入类型名称">
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
-                                    <label for="password" class="layui-form-label">登录密码：</label>
+                                    <label for="type" class="layui-form-label">类别：</label>
                                     <div class="layui-input-block">
-                                        <input type="password" class="layui-input"
-                                               name="password" id="password"
-                                               lay-verify="title" autocomplete="off"
-                                               placeholder="请设置登录密码">
+                                        <input id="type" type="radio" name="type" value="1" title="支付" checked>
+                                        <input type="radio" name="type" value="2" title="代付">
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
-                                    <label for="passwordConfirm" class="layui-form-label">确认密码：</label>
+                                    <label for="status" class="layui-form-label">状态：</label>
                                     <div class="layui-input-block">
-                                        <input type="password" class="layui-input"
-                                               name="passwordConfirm" id="passwordConfirm"
-                                               lay-verify="title" autocomplete="off"
-                                               placeholder="请再次输入登录密码">
+                                        <input id="status" type="radio" name="status" value="0" title="关闭" checked>
+                                        <input type="radio" name="status" value="1" title="开启">
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
                                     <div class="layui-input-block">
-                                        <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                                        <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">提交</button>
                                     </div>
                                 </div>
                             </form>

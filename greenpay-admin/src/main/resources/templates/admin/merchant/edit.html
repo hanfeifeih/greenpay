@@ -51,7 +51,8 @@
                                                 <div class="layui-form-item">
                                                     <label for="status" class="layui-form-label">状态：</label>
                                                     <div class="layui-input-block">
-                                                        <input th:name="status" id="status" type="checkbox" name="switch" lay-skin="switch">
+                                                        <input id="status" type="radio" name="status" value="0" title="关闭" checked>
+                                                        <input type="radio" name="status" value="1" title="开启">
                                                     </div>
                                                 </div>
                                                 <div class="layui-form-item">
@@ -167,17 +168,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="layui-row" style="padding-bottom: 10px">
-                        <div class="layui-card">
-                            <div class="layui-card-header">支付通道配置</div>
-                            <div class="layui-card-body" style="padding: 0">
-                                <table id="demo" lay-filter="test"></table>
-                                <script type="text/html" id="barDemo">
-                                    <a th:href="@{'/admin/merchant/list/3/edit'}" class="layui-btn layui-btn-xs">启用</a>
-                                </script>
                             </div>
                         </div>
                     </div>

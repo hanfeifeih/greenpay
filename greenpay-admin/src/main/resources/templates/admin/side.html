@@ -12,7 +12,7 @@
                     <cite>首页</cite>
                 </a>
                 <dl class="layui-nav-child">
-                    <dd th:replace="admin/side::layui_nav_item('/admin','数据概览')"></dd>
+                    <dd th:replace="admin/side::layui_nav_item('/admin/home','数据概览')"></dd>
                 </dl>
             </li>
             <li class="layui-nav-item">
@@ -81,7 +81,7 @@
         }();
     </script>
 </div>
-<dd th:class="${#httpServletRequest.requestURI==action?'layui-this':''}" th:fragment="layui_nav_item(action,title)">
+<dd th:class="${#strings.startsWith(#httpServletRequest.requestURI,action)?'layui-this':''}" th:fragment="layui_nav_item(action,title)">
     <a th:href="${action}" th:text="${title}"></a>
 </dd>
 </html>

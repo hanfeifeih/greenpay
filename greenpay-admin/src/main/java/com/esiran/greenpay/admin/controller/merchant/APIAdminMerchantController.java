@@ -3,11 +3,12 @@ package com.esiran.greenpay.admin.controller.merchant;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.esiran.greenpay.merchant.entity.Merchant;
+import com.esiran.greenpay.merchant.entity.MerchantProduct;
+import com.esiran.greenpay.merchant.entity.MerchantProductDTO;
 import com.esiran.greenpay.merchant.service.IMerchantService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/api/v1/merchants")
@@ -19,9 +20,12 @@ public class APIAdminMerchantController {
     }
 
     @GetMapping
-    public IPage<Merchant> list(){
-//        merchantService.page()
-        return merchantService.page(new Page<>(0,10));
+    public IPage<Merchant> list(Page<Merchant> page){
+        return merchantService.page(page);
+    }
+    @GetMapping("/{merchantId}/products")
+    public List<MerchantProductDTO> product(@PathVariable Integer merchantId){
+        return merchantService.selectMchProductById(merchantId);
     }
     @PostMapping("/add")
     public String add(){

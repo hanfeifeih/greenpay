@@ -18,7 +18,7 @@
                         <div class="layui-card-body" style="padding: 0">
                             <div class="admin-table_header">
                                 <div class="admin-table_header_left">
-                                    <button type="button" class="layui-btn">新增</button>
+                                    <a th:href="@{'/admin/merchant/add'}" class="layui-btn">新增</a>
                                     <button type="button" class="layui-btn">删除选中</button>
                                 </div>
                                 <div th:replace="admin/compose::admin-table_header_right('请输入商户名称')">
@@ -27,12 +27,9 @@
                             </div>
                             <table id="demo" lay-filter="test"></table>
                             <script type="text/html" id="barDemo">
-                                <a th:href="@{'/admin/merchant/list/3/password'}" class="layui-btn layui-btn-xs">修改密码</a>
-                                <a class="layui-btn layui-btn-xs" lay-event="edit">结算设置</a>
-                                <a class="layui-btn layui-btn-xs" lay-event="edit">支付通道</a>
-                                <a class="layui-btn layui-btn-xs" lay-event="edit">余额变更</a>
-                                <a th:href="@{'/admin/merchant/list/3/edit'}" class="layui-btn layui-btn-xs">编辑</a>
-                                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+                                <a th:href="@{'/admin/merchant/list/{{d.id}}/edit'}" class="layui-btn layui-btn-xs">编辑</a>
+                                <a th:href="@{'/admin/merchant/list/{{d.id}}/product/list'}" class="layui-btn layui-btn-xs">支付通道配置</a>
+                                <a th:href="@{'/admin/merchant/list/3/products'}" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
                             </script>
                         </div>
                     </div>
@@ -66,15 +63,15 @@
             }
             ,cols: [[ //表头
                 {type: 'checkbox', fixed: 'left'}
-                ,{field: 'id', title: 'ID',width:100, unresize:true}
-                ,{field: 'username', title: '用户名', width:150, unresize:true}
-                ,{field: 'name', title: '商户名称', width:150, unresize:true}
-                ,{field: 'email', title: '电子邮箱', width:250, unresize:true}
-                ,{field: 'balance', title: '可用余额', width:100, unresize:true}
-                ,{field: 'status', title: '状态', width:100, unresize:true}
-                ,{field: 'createdAt', title: '创建时间', width:180, unresize:true}
-                ,{field: 'updatedAt', title: '更新时间', width:180, unresize:true}
-                ,{fixed:'right',align: 'center', toolbar: '#barDemo'}
+                ,{field: 'id', title: 'ID',width:'5%', unresize:true}
+                ,{field: 'username', title: '用户名', width:'10%', unresize:true}
+                ,{field: 'name', title: '商户名称', width:'15%', unresize:true}
+                ,{field: 'email', title: '电子邮箱', width:'15%', unresize:true}
+                ,{field: 'balance', title: '可用余额', width:'10%', unresize:true}
+                ,{field: 'status', title: '状态', width:'5%', unresize:true}
+                ,{field: 'createdAt', title: '创建时间', width:'10%', unresize:true}
+                ,{field: 'updatedAt', title: '更新时间', width:'10%', unresize:true}
+                ,{title: '操作', align: 'left', width:'15%', toolbar: '#barDemo', unresize:true}
             ]]
         });
     }();
