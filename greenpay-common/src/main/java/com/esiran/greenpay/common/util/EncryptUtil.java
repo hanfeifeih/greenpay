@@ -2,6 +2,9 @@ package com.esiran.greenpay.common.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Random;
 
 public class EncryptUtil {
     private static final String CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -23,6 +26,20 @@ public class EncryptUtil {
         }
 
         return hexString.toString();
+    }
+
+    public static String getRandom(int length){
+        StringBuilder val = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < length; i++) {
+            val.append(random.nextInt(10));
+        }
+        return val.toString();
+    }
+    public static String baseTimelineCode(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddhhmmssSSS");
+        String dateTime = simpleDateFormat.format(new Date());
+        return dateTime.concat(getRandom(4));
     }
     public static String[] encode(String str){
         String md5Str = md5(str);

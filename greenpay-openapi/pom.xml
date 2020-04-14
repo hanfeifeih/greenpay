@@ -32,6 +32,10 @@
             <groupId>com.esiran</groupId>
             <artifactId>greenpay-system</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.esiran</groupId>
+            <artifactId>greenpay-actuator</artifactId>
+        </dependency>
     </dependencies>
 
 
