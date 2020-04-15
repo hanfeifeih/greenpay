@@ -69,15 +69,12 @@ public class InvoiceService implements IInvoiceService {
         }catch (Exception e){
             throw new APIException("商户支付渠道未开通","PAY_TYPE_NOT_FOUND");
         }
-        if (!merchantProductDTO.getStatus()){
+        if (!merchantProductDTO.getStatus() ){
             throw new APIException("商户支付渠道未开通","PAY_TYPE_LOCKED");
         }
         Product product = productService.getById(merchantProductDTO.getProductId());
-        if (product == null){
+        if (product == null || !product.getStatus()){
             throw new APIException("系统错误，获取支付产品失败","PAY_PRODUCT_NOT_FOUND");
-        }
-        if (!product.getStatus()){
-            throw new APIException("商户支付渠道未开通","PAY_PRODUCT_LOCKED");
         }
         Passage passage = null;
         PassageAccount passageAccount = null;
@@ -85,27 +82,18 @@ public class InvoiceService implements IInvoiceService {
             passage = passageService.getById(product.getDefaultPassageId());
             passageAccount = passageAccountService.getById(product.getDefaultPassageAccId());
         }
-        if (passage == null){
+        if (passage == null ||!passage.getStatus()){
             throw new APIException("系统错误，获取支付通道失败","PAY_PASSAGE_NOT_FOUND");
         }
-        if (!passage.getStatus()){
-            throw new APIException("商户支付渠道未开通","PAY_PASSAGE_LOCKED");
-        }
-        if (passageAccount == null){
+        if (passageAccount == null || !passageAccount.getStatus()){
             throw new APIException("系统错误，获取通道账户失败","PAY_PASSAGE_ACCOUNT_NOT_FOUND");
-        }
-        if (!passageAccount.getStatus()){
-            throw new APIException("商户支付渠道未开通","PAY_PASSAGE_ACCOUNT_LOCKED");
         }
         LambdaQueryWrapper<Interface> lambdaQueryWrapper =
                 new QueryWrapper<Interface>().lambda()
                         .eq(Interface::getInterfaceCode,passage.getInterfaceCode());
         Interface ints = interfaceService.getOne(lambdaQueryWrapper);
-        if (ints == null){
+        if (ints == null || !ints.getStatus()){
             throw new APIException("系统错误，获取支付接口失败","PAY_INTERFACE_NOT_FOUND");
-        }
-        if (!ints.getStatus()){
-            throw new APIException("商户支付渠道未开通","PAY_INTERFACE_LOCKED");
         }
         // 构造订单
         Order order = modelMapper.map(invoice,Order.class);
