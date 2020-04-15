@@ -39,7 +39,7 @@ public class APIExceptionHandler {
         return map;
     }
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public Map<String,Object> handleHttpMessageNotReadableException(HttpServletResponse response){
+    public Map<String,Object> handleHttpMessageNotReadableException(HttpMessageNotReadableException e, HttpServletResponse response){
         Map<String,Object> map = new HashMap<>();
         map.put("code","ARGUMENT_NOT_VALID");
         map.put("message", "请求参数校验失败");

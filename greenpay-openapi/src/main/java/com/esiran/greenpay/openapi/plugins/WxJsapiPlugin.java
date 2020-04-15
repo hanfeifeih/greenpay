@@ -21,7 +21,8 @@ public class WxJsapiPlugin implements Plugin<PayOrder> {
 
         @Override
         public void action(Flow<PayOrder> flow) {
-
+            PayOrder payOrder = flow.getData();
+            payOrder.getOrderDetail();
         }
     }
     private static final class PayOrderNotifyTask extends Task<PayOrder> {
@@ -37,7 +38,7 @@ public class WxJsapiPlugin implements Plugin<PayOrder> {
 
         @Override
         public void action(Flow<PayOrder> flow) {
-
+            PayOrder payOrder = flow.getData();
             System.out.println("执行回调订单");
         }
     }

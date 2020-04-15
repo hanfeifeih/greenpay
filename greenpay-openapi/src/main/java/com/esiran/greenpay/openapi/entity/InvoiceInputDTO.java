@@ -1,6 +1,8 @@
 package com.esiran.greenpay.openapi.entity;
 
+import com.esiran.greenpay.common.entity.BaseSignInput;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -9,7 +11,8 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 @Data
-public class InvoiceInputDTO {
+@EqualsAndHashCode(callSuper = true)
+public class InvoiceInputDTO extends BaseSignInput {
     /**
      * 应用ID
      */

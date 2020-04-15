@@ -1,6 +1,7 @@
 package com.esiran.greenpay.config;
 
 import com.esiran.greenpay.common.util.IdWorker;
+import com.esiran.greenpay.openapi.filter.OPenAPISecurityFilter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -8,19 +9,23 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.GsonHttpMessageConverter;
+import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
+    private final OPenAPISecurityFilter oPenAPISecurityFilter;
+
+    public WebMvcConfig(OPenAPISecurityFilter oPenAPISecurityFilter) {
+        this.oPenAPISecurityFilter = oPenAPISecurityFilter;
+    }
 
     @Bean
     public IdWorker idWorker(){
@@ -53,5 +58,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         objectMapper.registerModule(javaTimeModule).registerModule(new ParameterNamesModule());
         return objectMapper;
+    }
+    @Bean
+    public FilterRegistrationBean<OPenAPISecurityFilter> uploadFilterRegistration() {
+        FilterRegistrationBean<OPenAPISecurityFilter> registration = new FilterRegistrationBean<>();
+        registration.setFilter(oPenAPISecurityFilter);
+        registration.addUrlPatterns("/api/v1/*");
+        registration.setName("OPenAPISecurityFilter");
+        registration.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        return registration;
     }
 }

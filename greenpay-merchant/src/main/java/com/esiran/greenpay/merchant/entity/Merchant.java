@@ -44,6 +44,8 @@ public class Merchant extends BaseMapperEntity {
      * 商户状态（0：禁用，1：启用）
      */
     private Boolean status;
+    private String apiKey;
+    private String apiSecurity;
     /**
      * 商户登录密码
      */

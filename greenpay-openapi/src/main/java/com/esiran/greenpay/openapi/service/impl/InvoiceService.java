@@ -40,7 +40,8 @@ public class InvoiceService implements IInvoiceService {
             IProductService productService,
             IPassageAccountService passageAccountService,
             IPassageService passageService,
-            IInterfaceService interfaceService, IOrderService orderService, IOrderDetailService orderDetailService, IdWorker idWorker) {
+            IInterfaceService interfaceService, IOrderService orderService,
+            IOrderDetailService orderDetailService, IdWorker idWorker) {
         this.merchantService = merchantService;
         this.productService = productService;
         this.passageAccountService = passageAccountService;
