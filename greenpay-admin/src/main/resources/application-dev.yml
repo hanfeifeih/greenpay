@@ -17,6 +17,9 @@ spring:
     host: 192.168.3.158
     password: ruixiao123
 
+greenpay:
+  openapi:
+    enable_sign: false
 
 wechat:
   app_id: wx2aeda339f56138bf

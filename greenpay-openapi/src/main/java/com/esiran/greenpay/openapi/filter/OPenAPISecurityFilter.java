@@ -3,18 +3,20 @@ package com.esiran.greenpay.openapi.filter;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.esiran.greenpay.common.entity.APIException;
-import com.esiran.greenpay.common.sign.HMACMD5SignType;
-import com.esiran.greenpay.common.sign.Md5SignType;
-import com.esiran.greenpay.common.sign.SignType;
-import com.esiran.greenpay.common.sign.SignVerify;
+import com.esiran.greenpay.common.entity.BaseSignInput;
+import com.esiran.greenpay.common.sign.*;
 import com.esiran.greenpay.common.util.MapUtil;
+import com.esiran.greenpay.common.util.UrlSafeB64;
 import com.esiran.greenpay.common.wrapper.JsonRequestWrapper;
+import com.esiran.greenpay.merchant.entity.ApiConfig;
 import com.esiran.greenpay.merchant.entity.Merchant;
+import com.esiran.greenpay.merchant.service.IApiConfigService;
 import com.esiran.greenpay.merchant.service.IMerchantService;
 import com.esiran.greenpay.openapi.security.OpenAPISecurityUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -29,16 +31,20 @@ import java.util.*;
 public class OPenAPISecurityFilter implements Filter {
     private final static Gson gson = new Gson();
     private final IMerchantService merchantService;
+    private final IApiConfigService apiConfigService;
+    @Value("${greenpay.openapi.enable_sign:false}")
+    private boolean enableSign;
     @Autowired
-    public OPenAPISecurityFilter(IMerchantService merchantService) {
+    public OPenAPISecurityFilter(IMerchantService merchantService, IApiConfigService apiConfigService) {
         this.merchantService = merchantService;
+        this.apiConfigService = apiConfigService;
     }
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
     }
 
-    private void printError(HttpServletResponse response, String code,String msg, int status) throws IOException {
+    private void printError(HttpServletResponse response, String code, String msg, int status) throws IOException {
         Map<String,String> out = new LinkedHashMap<>();
         out.put("code",code);
         out.put("msg",msg);
@@ -54,13 +60,11 @@ public class OPenAPISecurityFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-        JsonRequestWrapper jsonRequestWrapper = new JsonRequestWrapper(httpServletRequest);
-        String body = jsonRequestWrapper.getBody();
+
         try {
-            Map<String,String> params = gson.fromJson(body,new TypeToken<Map<String,String>>(){}.getType());
-            verifyRequisiteParam(params);
-            verifyAuth(params);
-            filterChain.doFilter(jsonRequestWrapper,servletResponse);
+            verifyRequisiteParam(httpServletRequest);
+            verifySign(httpServletRequest);
+            filterChain.doFilter(httpServletRequest, servletResponse);
         }catch (Exception e){
             if (e instanceof ClassCastException || e instanceof NumberFormatException){
                 printError(httpServletResponse,"INVALID_REQUEST","请求参数无效",400);
@@ -79,9 +83,20 @@ public class OPenAPISecurityFilter implements Filter {
         }
     }
 
+    private static Map<String,String> resolveRequestParameter(HttpServletRequest request){
+        Enumeration<String> es = request.getParameterNames();
+        Map<String,String> map = new HashMap<>();
+        while (es.hasMoreElements()){
+            String key = es.nextElement();
+            String[] values = request.getParameterValues(key);
+            map.put(key,values[0]);
+        }
+        return map;
+    }
 
-    private static void verifyRequisiteParam(Map<String,String> params) throws APIException {
-        String timestampStr = params.get("timestamp");
+
+    private static void verifyRequisiteParam(HttpServletRequest request) throws APIException {
+        String timestampStr = request.getParameter("timestamp");
         if (timestampStr == null)
             throw new APIException("请求已过期，或超时","INVALID_REQUEST",400);
         long timestamp = Long.parseLong(timestampStr);
@@ -91,31 +106,43 @@ public class OPenAPISecurityFilter implements Filter {
             throw new APIException("请求已过期，或超时","INVALID_REQUEST",400);
     }
 
-
-    private void verifyAuth(Map<String,String> params) throws APIException {
-        String signTypeStr = params.get("signType");
+    private void verifySign(HttpServletRequest request) throws APIException {
+        Map<String,String> params = resolveRequestParameter(request);
+        String signTypeStr = request.getParameter("signType");
         if (StringUtils.isEmpty(signTypeStr))
             throw new APIException("无效的签名方式","INVALID_REQUEST_SIGN_TYPE",400);
         String principal = MapUtil.sortAndSerialize(params,new String[]{"sign"});
         SignType signType = signTypeStr.equals("md5") ? new Md5SignType(principal)
-                : signTypeStr.equals("hmac_md5") ? new HMACMD5SignType(principal):null;
+                : signTypeStr.equals("hmac_md5") ? new HMACMD5SignType(principal)
+                : signTypeStr.equals("rsa") ? new RSASignType(principal) :null;
         if (signType == null)
             throw new APIException("无效的签名方式","INVALID_REQUEST_SIGN_TYPE",400);
-        String apiKey = params.get("apiKey");
+        String apiKey = request.getParameter("apiKey");
         if (StringUtils.isEmpty(apiKey))
             throw new APIException("无效的 API_KEY","INVALID_API_KEY",400);
-        LambdaQueryWrapper<Merchant> queryWrapper = new QueryWrapper<Merchant>()
-                .lambda().eq(Merchant::getApiKey,apiKey);
-        Merchant m = merchantService.getOne(queryWrapper);
-        if (m == null)
+        LambdaQueryWrapper<ApiConfig> queryWrapper = new QueryWrapper<ApiConfig>()
+            .lambda().eq(ApiConfig::getApiKey,apiKey);
+        ApiConfig apiConfig = apiConfigService.getOne(queryWrapper);
+        if (apiConfig == null)
             throw new APIException("无效的 API_KEY","INVALID_API_KEY",400);
-        SignVerify signVerify = signType.sign(m.getApiSecurity());
-        String sign = params.get("sign");
+        Merchant merchant = merchantService.getById(apiConfig.getMchId());
+        if (merchant == null)
+            throw new APIException("无效的 API_KEY","INVALID_API_KEY",400);
+        SignVerify signVerify;
+        String sign;
+        if (signType instanceof RSASignType){
+            signVerify = signType.sign(apiConfig.getMchPubKey());
+            sign = request.getParameter("sign");
+            sign = UrlSafeB64.decode(sign);
+        }else {
+            signVerify = signType.sign(apiConfig.getApiSecurity());
+            sign = request.getParameter("sign");
+        }
         if (StringUtils.isEmpty(sign))
             throw new APIException("签名内容不能为空","INVALID_REQUEST",400);
-        if (signVerify.verify(sign))
+        if (!(signVerify.verify(sign) && enableSign))
             throw new APIException("签名校验失败","INVALID_SIGN",400);
-        OpenAPISecurityUtils.setSubject(m);
+        OpenAPISecurityUtils.setSubject(merchant);
     }
 
     @Override

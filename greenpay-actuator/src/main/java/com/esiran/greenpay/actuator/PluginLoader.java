@@ -1,6 +1,5 @@
 package com.esiran.greenpay.actuator;
 
-import sun.plugin.security.PluginClassLoader;
 
 import java.lang.reflect.Type;
 

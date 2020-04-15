@@ -22,7 +22,7 @@ public class WxJsapiPlugin implements Plugin<PayOrder> {
         @Override
         public void action(Flow<PayOrder> flow) {
             PayOrder payOrder = flow.getData();
-            payOrder.getOrderDetail();
+//            payOrder.getOrder();
         }
     }
     private static final class PayOrderNotifyTask extends Task<PayOrder> {

@@ -39,6 +39,7 @@
         <weixin-java.version>3.5.0</weixin-java.version>
         <shiro.version>1.5.1</shiro.version>
         <modelmapper.version>2.3.0</modelmapper.version>
+        <junit.version>4.12</junit.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -48,6 +49,11 @@
                 <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.esiran</groupId>

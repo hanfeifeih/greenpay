@@ -16,7 +16,8 @@ public class MapUtil {
         List<String> keyList = new ArrayList<>(keys);
         Collections.sort(keyList);
         StringBuilder sb = new StringBuilder();
-        List<String> excludeKeyList = Arrays.asList(excludeKeys);
+        List<String> excludeKeyList = excludeKeys==null?new ArrayList<>()
+                :Arrays.asList(excludeKeys);
         for (int i=0; i<keyList.size(); i++){
             String key = keyList.get(i);
             if (excludeKeyList.contains(key))

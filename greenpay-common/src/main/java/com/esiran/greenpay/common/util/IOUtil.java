@@ -30,7 +30,7 @@ public class IOUtil {
         try {
             StringBuilder sb = new StringBuilder();
             byte[] buffer = new byte[1024];
-            int nRead = 0;
+            int nRead;
             while ((nRead = inputStream.read(buffer,0,buffer.length)) != -1){
                 String str = new String(buffer,0,nRead);
                 sb.append(str);

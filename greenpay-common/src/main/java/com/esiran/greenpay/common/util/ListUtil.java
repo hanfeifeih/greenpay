@@ -11,4 +11,12 @@ public class ListUtil {
         }
         return sb.toString();
     }
+    public static <T> int findIndex(List<T> data, T s){
+        for (int i=0; i<data.size(); i++){
+            if(!data.get(i).equals(s))
+                continue;
+            return i;
+        }
+        return -1;
+    }
 }

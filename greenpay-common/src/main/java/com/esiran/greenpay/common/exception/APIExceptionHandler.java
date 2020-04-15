@@ -3,6 +3,7 @@ package com.esiran.greenpay.common.exception;
 import com.esiran.greenpay.common.entity.APIError;
 import com.esiran.greenpay.common.entity.APIException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -21,16 +22,7 @@ public class APIExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String,Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletResponse response){
         BindingResult bindResult = e.getBindingResult();
-        List<FieldError> fieldErrors = bindResult.getFieldErrors();
-        List<APIError> errors = fieldErrors.stream().map(item->{
-            APIError apiError = new APIError();
-            String code = item.getCode();
-            String field = item.getField();
-            assert code != null;
-            apiError.setCode(field.concat(".").concat(code));
-            apiError.setMessage(item.getDefaultMessage());
-            return apiError;
-        }).collect(Collectors.toList());
+        List<APIError> errors = resolveApiErrors(bindResult);
         Map<String,Object> map = new HashMap<>();
         map.put("code","ARGUMENT_NOT_VALID");
         map.put("message", "请求参数校验失败");
@@ -46,7 +38,28 @@ public class APIExceptionHandler {
         response.setStatus(400);
         return map;
     }
-
+    private List<APIError> resolveApiErrors(BindingResult bindingResult){
+        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+        return fieldErrors.stream().map(item->{
+            APIError apiError = new APIError();
+            String code = item.getCode();
+            String field = item.getField();
+            assert code != null;
+            apiError.setCode(field.concat(".").concat(code));
+            apiError.setMessage(item.getDefaultMessage());
+            return apiError;
+        }).collect(Collectors.toList());
+    }
+    @ExceptionHandler(BindException.class)
+    public Map<String,Object> handleBindException(BindException e, HttpServletResponse response){
+        List<APIError> errors = resolveApiErrors(e.getBindingResult());
+        Map<String,Object> map = new HashMap<>();
+        map.put("code","ARGUMENT_NOT_VALID");
+        map.put("message", "请求参数校验失败");
+        map.put("errors", errors);
+        response.setStatus(400);
+        return map;
+    }
     @ExceptionHandler(APIException.class)
     public  Map<String,Object> handleAPIException(APIException e,HttpServletResponse response){
         Map<String,Object> map = new HashMap<>();

@@ -5,7 +5,7 @@ logging:
   level:
     com.github.binarywang.wxpay: error
     me.chanjar.weixin: error
-
+    com.esiran.greenpay.common.sign: debug
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -16,6 +16,9 @@ spring:
     port: 6379
     host: localhost
 
+greenpay:
+  openapi:
+    enable_sign: true
 
 wechat:
   app_id: wx2aeda339f56138bf
