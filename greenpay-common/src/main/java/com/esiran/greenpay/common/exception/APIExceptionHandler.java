@@ -1,5 +1,6 @@
 package com.esiran.greenpay.common.exception;
 
+import com.baomidou.mybatisplus.extension.enums.ApiErrorCode;
 import com.esiran.greenpay.common.entity.APIError;
 import com.esiran.greenpay.common.entity.APIException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -97,7 +98,24 @@ public class APIExceptionHandler {
         return map;
     }
     @ExceptionHandler(Exception.class)
-    public Map<String,Object> handleDefaultException(Exception e,HttpServletResponse response){
+    public Map<String,Object> handleDefaultException(
+            HttpServletRequest request,
+            Exception e,
+            HttpServletResponse response,
+            HttpSession httpSession) throws IOException {
+        Boolean isView = (Boolean) request.getAttribute("isView");
+        if (isView == null || isView){
+            List<APIError> errors = new ArrayList<>();
+            APIError error = new APIError();
+            error.setCode("SERVER_ERROR");
+            error.setMessage(e.getMessage());
+            errors.add(error);
+            httpSession.setAttribute("errors",errors);
+            String s = request.getRequestURI();
+            System.out.println(s);
+            response.sendRedirect(s);
+            return null;
+        }
         e.printStackTrace();
         response.setStatus(500);
         Map<String,Object> map = new HashMap<>();

@@ -1,9 +1,8 @@
 package com.esiran.greenpay.admin.controller.merchant;
 
 import com.esiran.greenpay.common.entity.APIError;
-import com.esiran.greenpay.merchant.entity.Merchant;
 import com.esiran.greenpay.merchant.entity.MerchantInputDTO;
-import com.esiran.greenpay.merchant.entity.MerchantProductDTO;
+import com.esiran.greenpay.merchant.service.IMerchantService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +14,12 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin/merchant")
 public class AdminMerchantController {
+
+    private final IMerchantService merchantService;
+
+    public AdminMerchantController(IMerchantService merchantService) {
+        this.merchantService = merchantService;
+    }
 
     @GetMapping("/list")
     public String list(){
@@ -44,7 +49,8 @@ public class AdminMerchantController {
     }
 
     @PostMapping("/add")
-    public String add(@Valid MerchantInputDTO merchant){
-        return "admin/merchant/add";
+    public String add(@Valid MerchantInputDTO merchant) throws Exception {
+        merchantService.addMerchant(merchant);
+        return "redirect:/admin/merchant/list";
     }
 }

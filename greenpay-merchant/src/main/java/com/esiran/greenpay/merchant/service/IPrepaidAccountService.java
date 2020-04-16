@@ -2,6 +2,7 @@ package com.esiran.greenpay.merchant.service;
 
 import com.esiran.greenpay.merchant.entity.PrepaidAccount;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.esiran.greenpay.merchant.entity.PrepaidAccountDTO;
 
 /**
  * <p>
@@ -12,5 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020-04-13
  */
 public interface IPrepaidAccountService extends IService<PrepaidAccount> {
-
+    PrepaidAccountDTO findByMerchantId(Integer mchId);
 }

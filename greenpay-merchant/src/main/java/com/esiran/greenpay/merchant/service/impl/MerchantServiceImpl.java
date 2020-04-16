@@ -2,18 +2,18 @@ package com.esiran.greenpay.merchant.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.esiran.greenpay.merchant.entity.Merchant;
-import com.esiran.greenpay.merchant.entity.MerchantProduct;
-import com.esiran.greenpay.merchant.entity.MerchantProductDTO;
+import com.esiran.greenpay.common.util.EncryptUtil;
+import com.esiran.greenpay.merchant.entity.*;
 import com.esiran.greenpay.merchant.mapper.MerchantMapper;
-import com.esiran.greenpay.merchant.service.IMerchantProductService;
-import com.esiran.greenpay.merchant.service.IMerchantService;
+import com.esiran.greenpay.merchant.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.esiran.greenpay.pay.entity.Product;
 import com.esiran.greenpay.pay.entity.Type;
 import com.esiran.greenpay.pay.service.IProductService;
 import com.esiran.greenpay.pay.service.ITypeService;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +31,67 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
     private final ITypeService iTypeService;
     private final IProductService productService;
     private final IMerchantProductService merchantProductService;
-    public MerchantServiceImpl(ITypeService iTypeService, IProductService productService, IMerchantProductService merchantProductService) {
+    private final IApiConfigService apiConfigService;
+    private final IPayAccountService payAccountService;
+    private final IPrepaidAccountService prepaidAccountService;
+    private static final ModelMapper modelMapper = new ModelMapper();
+    public MerchantServiceImpl(
+            ITypeService iTypeService,
+            IProductService productService,
+            IMerchantProductService merchantProductService,
+            IApiConfigService apiConfigService,
+            IPayAccountService payAccountService,
+            IPrepaidAccountService prepaidAccountService) {
         this.iTypeService = iTypeService;
         this.productService = productService;
         this.merchantProductService = merchantProductService;
+        this.apiConfigService = apiConfigService;
+        this.payAccountService = payAccountService;
+        this.prepaidAccountService = prepaidAccountService;
+    }
+
+    @Override
+    public MerchantDTO findMerchantById(Integer id) {
+        Merchant merchant = getById(id);
+        MerchantDTO dto = modelMapper.map(merchant,MerchantDTO.class);
+        ApiConfigDTO apiConfigDTO = apiConfigService.findByMerchantId(merchant.getId());
+        PayAccountDTO payAccountDTO = payAccountService.findByMerchantId(merchant.getId());
+        PrepaidAccountDTO prepaidAccountDTO = prepaidAccountService.findByMerchantId(merchant.getId());
+        dto.setApiConfig(apiConfigDTO);
+        dto.setPayAccount(payAccountDTO);
+        dto.setPrepaidAccount(prepaidAccountDTO);
+        return dto;
+    }
+
+    @Override
+    @Transactional
+    public void addMerchant(MerchantInputDTO merchantInputDTO) throws Exception {
+        Merchant merchant = modelMapper.map(merchantInputDTO,Merchant.class);
+        LambdaQueryWrapper<Merchant> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Merchant::getUsername,merchant.getUsername()).or()
+                .eq(Merchant::getEmail,merchant.getEmail());
+        Merchant oldMerchant = getOne(queryWrapper);
+        if (oldMerchant != null){
+            throw new Exception("用户名或邮箱已存在");
+        }
+        save(merchant);
+        // api 配置信息构造
+        ApiConfig apiConfig = new ApiConfig();
+        apiConfig.setMchId(merchant.getId());
+        apiConfig.setApiKey(EncryptUtil.md5(EncryptUtil.baseTimelineCode()));
+        apiConfig.setApiSecurity(EncryptUtil.md5(EncryptUtil.baseTimelineCode()));
+        apiConfigService.save(apiConfig);
+        // 商户账户信息初始化
+        PayAccount payAccount = new PayAccount();
+        payAccount.setMerchantId(merchant.getId());
+        payAccount.setAvailBalance(0);
+        payAccount.setFreezeBalance(0);
+        payAccountService.save(payAccount);
+        PrepaidAccount prepaidAccount = new PrepaidAccount();
+        prepaidAccount.setMerchantId(merchant.getId());
+        prepaidAccount.setAvailBalance(0);
+        prepaidAccount.setFreezeBalance(0);
+        prepaidAccountService.save(prepaidAccount);
     }
 
     @Override

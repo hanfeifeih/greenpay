@@ -4,6 +4,8 @@ import com.esiran.greenpay.common.entity.BaseMapperEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+@EqualsAndHashCode(callSuper = true)
+@Data
 public class MerchantDTO extends BaseMapperEntity {
 
     /**
@@ -29,9 +31,7 @@ public class MerchantDTO extends BaseMapperEntity {
      * 商户状态（0：禁用，1：启用）
      */
     private Boolean status;
-    /**
-     * 商户登录密码
-     */
-    private String password;
-
+    private ApiConfigDTO apiConfig;
+    private PayAccountDTO payAccount;
+    private PrepaidAccountDTO prepaidAccount;
 }

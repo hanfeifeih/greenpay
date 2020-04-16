@@ -2,6 +2,7 @@ package com.esiran.greenpay.merchant.service;
 
 import com.esiran.greenpay.merchant.entity.ApiConfig;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.esiran.greenpay.merchant.entity.ApiConfigDTO;
 
 /**
  * <p>
@@ -12,5 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020-04-15
  */
 public interface IApiConfigService extends IService<ApiConfig> {
-
+    ApiConfigDTO findByMerchantId(Integer mchId);
 }
