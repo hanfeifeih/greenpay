@@ -33,6 +33,8 @@ public class ApiConfigDTO extends BaseMapperEntity {
      */
     private String pubKey;
 
+    private String pubKeyVal;
+
     /**
      * 商户公钥
      */

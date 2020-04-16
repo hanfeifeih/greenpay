@@ -41,6 +41,10 @@ public class ApiConfig extends BaseMapperEntity {
     private String apiSecurity;
 
     /**
+     * 平台私钥
+     */
+    private String privateKey;
+    /**
      * 平台公钥
      */
     private String pubKey;

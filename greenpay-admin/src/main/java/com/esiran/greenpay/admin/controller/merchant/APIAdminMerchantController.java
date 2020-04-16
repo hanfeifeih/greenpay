@@ -55,7 +55,6 @@ public class APIAdminMerchantController {
         LambdaUpdateWrapper<ApiConfig> updateWrapper = new UpdateWrapper<ApiConfig>().lambda();
         updateWrapper.set(ApiConfig::getMchPubKey,publicKey)
                 .eq(ApiConfig::getMchId,merchantId);
-
         apiConfigService.update(updateWrapper);
     }
 

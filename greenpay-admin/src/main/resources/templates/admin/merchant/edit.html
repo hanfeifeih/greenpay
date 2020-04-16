@@ -26,7 +26,8 @@
                                                     <div class="layui-input-block">
                                                         <input type="text" class="layui-input"
                                                                name="username" id="username"
-                                                               lay-verify="title" autocomplete="off"
+                                                               th:value="${merchant.username}"
+                                                               autocomplete="off"
                                                                placeholder="请输入用户名">
                                                     </div>
                                                 </div>
@@ -35,7 +36,8 @@
                                                     <div class="layui-input-block">
                                                         <input type="text" class="layui-input"
                                                                name="merchantName" id="merchantName"
-                                                               lay-verify="title" autocomplete="off"
+                                                               th:value="${merchant.name}"
+                                                               autocomplete="off"
                                                                placeholder="请输入商户名称">
                                                     </div>
                                                 </div>
@@ -44,7 +46,8 @@
                                                     <div class="layui-input-block">
                                                         <input type="text" class="layui-input"
                                                                name="email" id="email"
-                                                               lay-verify="title" autocomplete="off"
+                                                               th:value="${merchant.email}"
+                                                               autocomplete="off"
                                                                placeholder="请输入电子邮箱">
                                                     </div>
                                                 </div>
@@ -185,7 +188,7 @@
                                                             <input type="text" class="layui-input"
                                                                    name="apiKey" id="apiKey"
                                                                    autocomplete="off" readonly
-                                                                   th:value="'abcdefg1234567abc'">
+                                                                   th:value="${merchant.apiConfig.apiKey}">
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -196,7 +199,7 @@
                                                             <input type="text" class="layui-input"
                                                                    name="apiSecurity" id="apiSecurity"
                                                                    autocomplete="off" readonly
-                                                                   th:value="'abcdefg1234567abc'">
+                                                                   th:value="${merchant.apiConfig.apiSecurity}">
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -204,7 +207,7 @@
                                                     <fieldset class="layui-elem-field">
                                                         <legend>平台公钥</legend>
                                                         <div class="layui-field-box">
-                                                            <textarea name="desc" readonly class="layui-textarea">4561315815313</textarea>
+                                                            <textarea style="height: 130px" readonly class="layui-textarea" th:text="${merchant.apiConfig.pubKeyVal}"></textarea>
                                                         </div>
                                                     </fieldset>
                                                 </div>
@@ -246,7 +249,7 @@
     </div>
 </div>
 <th:block th:replace="admin/footer::script"/>
-<script th:inline="none">
+<script th:inline="javascript">
     !function(){
         let layer = layui.layer
             ,table = layui.table;

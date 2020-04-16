@@ -3,6 +3,7 @@ package com.esiran.greenpay.merchant.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.esiran.greenpay.common.util.EncryptUtil;
+import com.esiran.greenpay.common.util.RSAUtil;
 import com.esiran.greenpay.merchant.entity.*;
 import com.esiran.greenpay.merchant.mapper.MerchantMapper;
 import com.esiran.greenpay.merchant.service.*;
@@ -15,6 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +57,11 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
         Merchant merchant = getById(id);
         MerchantDTO dto = modelMapper.map(merchant,MerchantDTO.class);
         ApiConfigDTO apiConfigDTO = apiConfigService.findByMerchantId(merchant.getId());
+        String publicKeyVal = String.format("%s\r\n%s\r\n%s",
+                RSAUtil.PEM_FILE_PUBLIC_PKCS1_BEGIN,
+                apiConfigDTO.getPubKey(),
+                RSAUtil.PEM_FILE_PUBLIC_PKCS1_END);
+        apiConfigDTO.setPubKeyVal(publicKeyVal);
         PayAccountDTO payAccountDTO = payAccountService.findByMerchantId(merchant.getId());
         PrepaidAccountDTO prepaidAccountDTO = prepaidAccountService.findByMerchantId(merchant.getId());
         dto.setApiConfig(apiConfigDTO);
@@ -68,18 +75,23 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, Merchant> i
     public void addMerchant(MerchantInputDTO merchantInputDTO) throws Exception {
         Merchant merchant = modelMapper.map(merchantInputDTO,Merchant.class);
         LambdaQueryWrapper<Merchant> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Merchant::getUsername,merchant.getUsername()).or()
-                .eq(Merchant::getEmail,merchant.getEmail());
+        queryWrapper.eq(Merchant::getUsername, merchant.getUsername()).or()
+                .eq(Merchant::getEmail, merchant.getEmail());
         Merchant oldMerchant = getOne(queryWrapper);
         if (oldMerchant != null){
             throw new Exception("用户名或邮箱已存在");
         }
         save(merchant);
         // api 配置信息构造
+        KeyPair keyPair = RSAUtil.generateKeyPair();
+        String privateKey = RSAUtil.getPrivateKey(keyPair);
+        String publicKey = RSAUtil.getPublicKey(keyPair);
         ApiConfig apiConfig = new ApiConfig();
         apiConfig.setMchId(merchant.getId());
         apiConfig.setApiKey(EncryptUtil.md5(EncryptUtil.baseTimelineCode()));
         apiConfig.setApiSecurity(EncryptUtil.md5(EncryptUtil.baseTimelineCode()));
+        apiConfig.setPrivateKey(privateKey);
+        apiConfig.setPubKey(publicKey);
         apiConfigService.save(apiConfig);
         // 商户账户信息初始化
         PayAccount payAccount = new PayAccount();

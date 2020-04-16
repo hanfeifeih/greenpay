@@ -17,15 +17,16 @@ import java.util.stream.Collectors;
 
 public class RSAUtil {
     private static final String KEY_ALGORITHM = "rsa";
+    private static final int DEFAULT_KEY_SIZE = 1024;
     public static final String SIGNATURE_ALGORITHM_MD5_WITH_RSA = "MD5withRSA";
     public static final String SIGNATURE_ALGORITHM_SHA256_WITH_RSA = "SHA256WithRSA";
 
-    private static final String PEM_FILE_PUBLIC_PKCS1_BEGIN = "-----BEGIN PUBLIC KEY-----";
-    private static final String PEM_FILE_PUBLIC_PKCS1_END = "-----END PUBLIC KEY-----";
-    private static final String PEM_FILE_PRIVATE_PKCS1_BEGIN = "-----BEGIN RSA PRIVATE KEY-----";
-    private static final String PEM_FILE_PRIVATE_PKCS1_END = "-----END RSA PRIVATE KEY-----";
-    private static final String PEM_FILE_PRIVATE_PKCS8_BEGIN = "-----BEGIN PRIVATE KEY-----";
-    private static final String PEM_FILE_PRIVATE_PKCS8_END = "-----END PRIVATE KEY-----";
+    public static final String PEM_FILE_PUBLIC_PKCS1_BEGIN = "-----BEGIN PUBLIC KEY-----";
+    public static final String PEM_FILE_PUBLIC_PKCS1_END = "-----END PUBLIC KEY-----";
+    public static final String PEM_FILE_PRIVATE_PKCS1_BEGIN = "-----BEGIN RSA PRIVATE KEY-----";
+    public static final String PEM_FILE_PRIVATE_PKCS1_END = "-----END RSA PRIVATE KEY-----";
+    public static final String PEM_FILE_PRIVATE_PKCS8_BEGIN = "-----BEGIN PRIVATE KEY-----";
+    public static final String PEM_FILE_PRIVATE_PKCS8_END = "-----END PRIVATE KEY-----";
 
     public static String resolvePublicKey(String content) throws Exception {
         return resolveContentBody(content,PEM_FILE_PUBLIC_PKCS1_BEGIN,PEM_FILE_PUBLIC_PKCS1_END);
@@ -50,6 +51,43 @@ public class RSAUtil {
     }
     public static String resolvePrivateKey(String content) throws Exception {
         return resolveContentBody(content,PEM_FILE_PRIVATE_PKCS8_BEGIN,PEM_FILE_PRIVATE_PKCS8_END);
+    }
+
+    /**
+     * 生成 1024 长度的密钥对
+     * @return 密钥对
+     */
+    public static KeyPair generateKeyPair(){
+        return generateKeyPair(DEFAULT_KEY_SIZE);
+    }
+
+
+    public static String getPrivateKey(KeyPair keyPair){
+        PrivateKey privateKey = keyPair.getPrivate();
+        byte[] bytes = privateKey.getEncoded();
+        return (Base64.getEncoder().encodeToString(bytes));
+    }
+
+    public static String getPublicKey(KeyPair keyPair){
+        PublicKey publicKey = keyPair.getPublic();
+        byte[] bytes = publicKey.getEncoded();
+        return (Base64.getEncoder().encodeToString(bytes));
+    }
+    /**
+     * 生成指定长度的密钥对
+     * @param keySize 长度
+     * @return 密钥对
+     */
+    public static KeyPair generateKeyPair(int keySize){
+        KeyPair keyPair = null;
+        try {
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(KEY_ALGORITHM);
+            keyPairGenerator.initialize(keySize);
+            keyPair = keyPairGenerator.generateKeyPair();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return keyPair;
     }
 
     /**
