@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>支付接口 - GreenPay</title>
+    <title>支付通道 - GreenPay</title>
     <th:block th:replace="admin/header::stylesheet" />
 </head>
 <body class="layui-layout-body">
@@ -11,23 +11,23 @@
         <div th:replace="admin/side::menu"></div>
         <div class="layui-body">
             <div class="layadmin-tabsbody-item layui-show">
-                <div th:replace="admin/compose::layui-breadcrumb('支付配置','支付接口')"></div>
+                <div th:replace="admin/compose::layui-breadcrumb('支付配置','支付通道')"></div>
                 <div class="layui-fluid">
                     <div class="layui-card">
-                        <div class="layui-card-header">支付接口</div>
+                        <div class="layui-card-header">支付通道子账户</div>
                         <div class="layui-card-body" style="padding: 0">
                             <div class="admin-table_header">
                                 <div class="admin-table_header_left">
-                                    <a th:href="@{'/admin/pay/interface/list/add'}" class="layui-btn">新增</a>
+                                    <a th:href="@{'/admin/pay/passage/list/1/acc/add'}" class="layui-btn">新增</a>
                                     <button type="button" class="layui-btn">删除选中</button>
                                 </div>
-                                <div th:replace="admin/compose::admin-table_header_right('请输入支付接口编码')">
+                                <div th:replace="admin/compose::admin-table_header_right('请输入子账户名称')">
                                 </div>
                                 <div style="clear:both;"></div>
                             </div>
                             <table id="demo" lay-filter="test"></table>
                             <script type="text/html" id="barDemo">
-                                <a th:href="@{'/admin/pay/type/list/{{d.id}}/edit'}" class="layui-btn layui-btn-xs">编辑</a>
+                                <a th:href="@{'/admin/pay/passage/list/{{d.id}}/acc/1/edit'}" class="layui-btn layui-btn-xs">编辑</a>
                                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
                             </script>
                         </div>
@@ -63,9 +63,8 @@
             ,cols: [[ //表头
                 {type: 'checkbox', fixed: 'left'}
                 ,{field: 'id', title: 'ID',width:'5%', unresize:true}
-                ,{field: 'typeCode', title: '支付类型编码', width:'10%', unresize:true}
-                ,{field: 'interfaceCode', title: '接口编码', width:'15%', unresize:true}
-                ,{field: 'interfaceName', title: '接口名称', width:'25%', unresize:true}
+                ,{field: 'passageName', title: '通道名称', width:'25%', unresize:true}
+                ,{field: 'passageAccName', title: '子账户名称', width:'25%', unresize:true}
                 ,{field: 'status', title: '状态', width:'5%', unresize:true}
                 ,{field: 'createdAt', title: '创建时间', width:'10%', unresize:true}
                 ,{field: 'updatedAt', title: '更新时间', width:'10%', unresize:true}

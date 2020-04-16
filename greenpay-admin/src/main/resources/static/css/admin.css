@@ -28,3 +28,6 @@
 .admin-table_header .layui-form-item .layui-inline {
     margin-bottom: 0!important;
 }
+.error-card .layui-elem-quote{
+    border-left: 5px solid #b30000;
+}

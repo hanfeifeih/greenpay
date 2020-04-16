@@ -11,8 +11,8 @@ public class AdminPayInterfaceController {
     public String list(){
         return "admin/pay/interface/list";
     }
-//    @GetMapping("/add")
-//    public String add(){
-//        return "admin/merchant/add";
-//    }
+    @GetMapping("/list/add")
+    public String add(){
+        return "admin/pay/interface/add";
+    }
 }

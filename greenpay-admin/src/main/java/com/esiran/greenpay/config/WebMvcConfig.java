@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.time.LocalDateTime;
@@ -22,9 +23,10 @@ import java.time.format.DateTimeFormatter;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
     private final OPenAPISecurityFilter oPenAPISecurityFilter;
-
-    public WebMvcConfig(OPenAPISecurityFilter oPenAPISecurityFilter) {
+    private final BaseInterceptor baseInterceptor;
+    public WebMvcConfig(OPenAPISecurityFilter oPenAPISecurityFilter, BaseInterceptor baseInterceptor) {
         this.oPenAPISecurityFilter = oPenAPISecurityFilter;
+        this.baseInterceptor = baseInterceptor;
     }
 
     @Bean
@@ -67,5 +69,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registration.setName("OPenAPISecurityFilter");
         registration.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return registration;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(baseInterceptor).addPathPatterns("/**");
     }
 }

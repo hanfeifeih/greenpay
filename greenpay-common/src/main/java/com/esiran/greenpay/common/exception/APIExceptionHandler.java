@@ -3,6 +3,7 @@ package com.esiran.greenpay.common.exception;
 import com.esiran.greenpay.common.entity.APIError;
 import com.esiran.greenpay.common.entity.APIException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -11,7 +12,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,14 +36,18 @@ public class APIExceptionHandler {
         return map;
     }
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public Map<String,Object> handleHttpMessageNotReadableException(HttpMessageNotReadableException e, HttpServletResponse response){
+    public Map<String,Object> handleHttpMessageNotReadableException(
+            HttpMessageNotReadableException e,
+            HttpServletRequest request,
+            HttpServletResponse response){
         Map<String,Object> map = new HashMap<>();
         map.put("code","ARGUMENT_NOT_VALID");
         map.put("message", "请求参数校验失败");
         response.setStatus(400);
         return map;
     }
-    private List<APIError> resolveApiErrors(BindingResult bindingResult){
+    private List<APIError> resolveApiErrors(
+            BindingResult bindingResult){
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
         return fieldErrors.stream().map(item->{
             APIError apiError = new APIError();
@@ -51,8 +60,18 @@ public class APIExceptionHandler {
         }).collect(Collectors.toList());
     }
     @ExceptionHandler(BindException.class)
-    public Map<String,Object> handleBindException(BindException e, HttpServletResponse response){
+    public Map<String,Object> handleBindException(
+            BindException e, HttpServletResponse response,
+            HttpServletRequest request, HttpSession session) throws IOException {
         List<APIError> errors = resolveApiErrors(e.getBindingResult());
+        Boolean isView = (Boolean) request.getAttribute("isView");
+        if (isView == null || isView){
+            session.setAttribute("errors",errors);
+            String s = request.getRequestURI();
+            System.out.println(s);
+            response.sendRedirect(s);
+            return null;
+        }
         Map<String,Object> map = new HashMap<>();
         map.put("code","ARGUMENT_NOT_VALID");
         map.put("message", "请求参数校验失败");

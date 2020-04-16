@@ -1,12 +1,15 @@
 package com.esiran.greenpay.admin.controller.merchant;
 
+import com.esiran.greenpay.common.entity.APIError;
+import com.esiran.greenpay.merchant.entity.Merchant;
+import com.esiran.greenpay.merchant.entity.MerchantInputDTO;
 import com.esiran.greenpay.merchant.entity.MerchantProductDTO;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -31,12 +34,17 @@ public class AdminMerchantController {
     public String product(@PathVariable String mchId, @RequestParam String payTypeCode){
         return "admin/merchant/product/edit";
     }
-    @GetMapping("/list/{userId}/settle")
-    public String settle(@PathVariable String userId){
-        return "admin/merchant/settle";
-    }
     @GetMapping("/add")
-    public String add(){
+    @SuppressWarnings("unchecked")
+    public String add(HttpSession httpSession, ModelMap modelMap){
+        List<APIError> apiErrors = (List<APIError>) httpSession.getAttribute("errors");
+        modelMap.addAttribute("errors", apiErrors);
+        httpSession.removeAttribute("errors");
+        return "admin/merchant/add";
+    }
+
+    @PostMapping("/add")
+    public String add(@Valid MerchantInputDTO merchant){
         return "admin/merchant/add";
     }
 }
