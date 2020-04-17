@@ -28,4 +28,10 @@
         </div>
     </form>
 </div>
+<div class="layui-card error-card" th:fragment="admin-error_view(errors)">
+    <div class="layui-card-body">
+        <!--/*@thymesVar id="message" type="com.esiran.greenpay.common.entity.APIError"*/-->
+        <blockquote class="layui-elem-quote" th:each="error:${errors}" th:text="${error.message}"></blockquote>
+    </div>
+</div>
 </html>

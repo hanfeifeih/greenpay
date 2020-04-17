@@ -16,11 +16,13 @@ import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Configuration
+@EnableSwagger2
 public class WebMvcConfig implements WebMvcConfigurer {
     private final OPenAPISecurityFilter oPenAPISecurityFilter;
     private final BaseInterceptor baseInterceptor;

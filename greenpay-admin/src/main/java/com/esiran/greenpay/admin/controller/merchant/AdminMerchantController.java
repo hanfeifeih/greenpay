@@ -1,10 +1,9 @@
 package com.esiran.greenpay.admin.controller.merchant;
 
 import com.esiran.greenpay.common.entity.APIError;
-import com.esiran.greenpay.merchant.entity.MerchantDTO;
+import com.esiran.greenpay.merchant.entity.MerchantDetailDTO;
 import com.esiran.greenpay.merchant.entity.MerchantInputDTO;
 import com.esiran.greenpay.merchant.service.IMerchantService;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +28,7 @@ public class AdminMerchantController {
     }
     @GetMapping("/list/{mchId}/edit")
     public String add(@PathVariable Integer mchId, ModelMap modelMap){
-        MerchantDTO merchantDTO = merchantService.findMerchantById(mchId);
+        MerchantDetailDTO merchantDTO = merchantService.findMerchantById(mchId);
         modelMap.addAttribute("merchant",merchantDTO);
         return "admin/merchant/edit";
     }

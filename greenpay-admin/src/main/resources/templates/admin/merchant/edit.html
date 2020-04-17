@@ -68,19 +68,81 @@
                                     </div>
                                 </div>
                             </div>
-
-
                             <div class="layui-row" style="padding-bottom: 10px">
                                 <div class="layui-col-md12">
                                     <div class="layui-card">
-                                        <div class="layui-card-header">账户余额变更</div>
+                                        <div class="layui-card-header">支付账户</div>
                                         <div class="layui-card-body">
                                             <form class="layui-form" action="">
+                                                <div class="layui-form-item">
+                                                    <label for="payAvailBalance" class="layui-form-label" style="width: 120px">
+                                                        可用余额（元）：
+                                                    </label>
+                                                    <div class="layui-input-block" style="margin-left: 150px;">
+                                                        <input type="number" class="layui-input"
+                                                               id="payAvailBalance" readonly
+                                                               th:value="${merchant.payAccount.availBalance}">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-form-item">
+                                                    <label for="payFreezeBalance" class="layui-form-label" style="width: 120px">
+                                                        冻结金额（元）：
+                                                    </label>
+                                                    <div class="layui-input-block" style="margin-left: 150px;">
+                                                        <input type="number" class="layui-input"
+                                                               id="payFreezeBalance" readonly
+                                                               th:value="${merchant.payAccount.freezeBalance}">
+                                                    </div>
+                                                </div>
                                                 <div class="layui-form-item">
                                                     <label for="bgje" class="layui-form-label" style="width: 120px">变更金额（元）：</label>
                                                     <div class="layui-input-block" style="margin-left: 150px;">
                                                         <input type="number" class="layui-input"
                                                                name="bgje" id="bgje"
+                                                               autocomplete="off"
+                                                               placeholder="请输入变更金额（元）">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-form-item">
+                                                    <div class="layui-input-block" style="margin-left: 150px;">
+                                                        <button class="layui-btn">增加余额</button>
+                                                        <button type="reset" class="layui-btn layui-btn-primary">扣减余额</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row" style="padding-bottom: 10px">
+                                <div class="layui-col-md12">
+                                    <div class="layui-card">
+                                        <div class="layui-card-header">预充值账户</div>
+                                        <div class="layui-card-body">
+                                            <form class="layui-form" action="">
+                                                <div class="layui-form-item">
+                                                    <label for="prepaidAvailBalance" class="layui-form-label" style="width: 120px">
+                                                        可用余额（元）：
+                                                    </label>
+                                                    <div class="layui-input-block" style="margin-left: 150px;">
+                                                        <input type="number" class="layui-input"
+                                                               id="prepaidAvailBalance" readonly th:value="123">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-form-item">
+                                                    <label for="prepaidFreezeBalance" class="layui-form-label" style="width: 120px">
+                                                        冻结金额（元）：
+                                                    </label>
+                                                    <div class="layui-input-block" style="margin-left: 150px;">
+                                                        <input type="number" class="layui-input"
+                                                               id="prepaidFreezeBalance" readonly th:value="123">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-form-item">
+                                                    <label for="changePrepaidBalance" class="layui-form-label" style="width: 120px">变更金额（元）：</label>
+                                                    <div class="layui-input-block" style="margin-left: 150px;">
+                                                        <input type="number" class="layui-input"
+                                                               name="changePrepaidBalance" id="changePrepaidBalance"
                                                                autocomplete="off"
                                                                placeholder="请输入变更金额（元）">
                                                     </div>
@@ -130,41 +192,6 @@
                                                 <div class="layui-form-item" style="width: 120px">
                                                     <div class="layui-input-block" style="margin-left: 150px;">
                                                         <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="layui-row" style="padding-bottom: 10px">
-                                <div class="layui-col-md12">
-                                    <div class="layui-card">
-                                        <div class="layui-card-header">重置密码</div>
-                                        <div class="layui-card-body">
-                                            <form class="layui-form" action="">
-                                                <div class="layui-form-item">
-                                                    <label for="password" class="layui-form-label">登录密码：</label>
-                                                    <div class="layui-input-block">
-                                                        <input type="password" class="layui-input"
-                                                               name="password" id="password"
-                                                               lay-verify="title" autocomplete="off"
-                                                               placeholder="请设置登录密码">
-                                                    </div>
-                                                </div>
-                                                <div class="layui-form-item">
-                                                    <label for="passwordConfirm" class="layui-form-label">确认密码：</label>
-                                                    <div class="layui-input-block">
-                                                        <input type="password" class="layui-input"
-                                                               name="passwordConfirm" id="passwordConfirm"
-                                                               lay-verify="title" autocomplete="off"
-                                                               placeholder="请再次输入登录密码">
-                                                    </div>
-                                                </div>
-                                                <div class="layui-form-item">
-                                                    <div class="layui-input-block">
-                                                        <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">重置密码</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -236,6 +263,41 @@
                                                     </form>
                                                 </div>
                                             </fieldset>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-row" style="padding-bottom: 10px">
+                                <div class="layui-col-md12">
+                                    <div class="layui-card">
+                                        <div class="layui-card-header">重置密码</div>
+                                        <div class="layui-card-body">
+                                            <form class="layui-form" action="">
+                                                <div class="layui-form-item">
+                                                    <label for="password" class="layui-form-label">登录密码：</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="password" class="layui-input"
+                                                               name="password" id="password"
+                                                               lay-verify="title" autocomplete="off"
+                                                               placeholder="请设置登录密码">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-form-item">
+                                                    <label for="passwordConfirm" class="layui-form-label">确认密码：</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="password" class="layui-input"
+                                                               name="passwordConfirm" id="passwordConfirm"
+                                                               lay-verify="title" autocomplete="off"
+                                                               placeholder="请再次输入登录密码">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-form-item">
+                                                    <div class="layui-input-block">
+                                                        <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">重置密码</button>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>

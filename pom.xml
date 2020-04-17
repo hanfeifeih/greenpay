@@ -40,6 +40,7 @@
         <shiro.version>1.5.1</shiro.version>
         <modelmapper.version>2.3.0</modelmapper.version>
         <junit.version>4.12</junit.version>
+        <swagger2.version>2.9.2</swagger2.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -49,6 +50,17 @@
                 <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${swagger2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${swagger2.version}</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>

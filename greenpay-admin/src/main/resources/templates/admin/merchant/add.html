@@ -12,7 +12,7 @@
         <div class="layui-body">
             <div class="layadmin-tabsbody-item layui-show">
                 <div th:replace="admin/compose::layui-breadcrumb('商户管理','添加商户')"></div>
-                <div class="layui-card error-card">
+                <div class="layui-card error-card" th:style="${errors==null}?'display:none;':''">
                     <div class="layui-card-body">
                         <blockquote class="layui-elem-quote" th:each="error:${errors}" th:text="${error.message}"></blockquote>
                     </div>
