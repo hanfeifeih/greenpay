@@ -28,3 +28,7 @@ wechat:
   mch_key: 2624eedd356624bc7a662c29ceb0a20e
   cert_path: classpath:/keystory/wxpay/apiclient_cert.p12
 
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
