@@ -3,7 +3,6 @@ package com.esiran.greenpay.system.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.esiran.greenpay.system.entity.Role;
 import com.esiran.greenpay.system.entity.UserRole;
 import com.esiran.greenpay.system.entity.dot.UserRoleDto;
 import com.esiran.greenpay.system.mapper.UserRoleMapper;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> implements IUserRoleService {
-
     @Override
     public IPage<UserRoleDto> selectUserRoles(Page<UserRole> userVoPage) {
         QueryWrapper<UserRole> wrapper = new QueryWrapper<>();

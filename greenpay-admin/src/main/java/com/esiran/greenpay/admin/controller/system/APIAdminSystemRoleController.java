@@ -3,12 +3,9 @@ package com.esiran.greenpay.admin.controller.system;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.esiran.greenpay.system.entity.Role;
-import com.esiran.greenpay.system.entity.UserRole;
 import com.esiran.greenpay.system.entity.dot.UserRoleDto;
 import com.esiran.greenpay.system.service.IRoleService;
-import com.esiran.greenpay.system.service.IUserRoleService;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author han
- * @Package com.esiran.greenpay.admin.controller.system
- * @date 2020/4/17 18:01
  */
 
 @RestController

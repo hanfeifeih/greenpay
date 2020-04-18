@@ -46,7 +46,7 @@
         //第一个实例
         table.render({
             elem: '#demo'
-            ,url: '/admin/api/products' //数据接口
+            ,url: '/admin/api/v1/system/menu' //数据接口
             ,page: true //开启分页
             ,parseData: function(res){ //res 即为原始返回的数据
                 return {
@@ -63,11 +63,13 @@
             ,cols: [[ //表头
                 {type: 'checkbox', fixed: 'left'}
                 ,{field: 'id', title: 'ID',width:100, unresize:true}
-                ,{field: 'productTitle', title: '产品标题', width:250, unresize:true}
-                ,{align: 'right', field: 'costPriceVal', title: '成本价/美元', width:150, unresize:true}
-                ,{align: 'right', field: 'priceVal', title: '售价/美元', width:150, unresize:true}
-                ,{field: 'countryName', title: '国家', width:250, unresize:true}
-                ,{field: 'providerName', title: '提供商', width:250, unresize:true}
+                ,{field: 'title', title: '菜单标题', width:180, unresize:true}
+                ,{align: 'center', field: 'mark', title: '菜单标识', width:180, unresize:true}
+                ,{align: 'center', field: 'type', title: '菜单类型', width:180, unresize:true}
+                ,{field: 'icon', title: '目录图标', width:180, unresize:true}
+                ,{field: 'path', title: '菜单路由', width:180, unresize:true}
+                ,{field: 'parent_id', title: '上级菜单ID', width:100, unresize:true}
+                ,{field: 'sorts', title: '排序权重', width:100, unresize:true}
                 ,{field: 'createdAt', title: '创建时间', width:180, unresize:true}
                 ,{field: 'updatedAt', title: '更新时间', width:180, unresize:true}
                 ,{fixed:'right',align: 'center', toolbar: '#barDemo', width:120}
