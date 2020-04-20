@@ -49,7 +49,7 @@ public class AdminMerchantController {
         modelMap.addAttribute("errors", apiErrors);
         httpSession.removeAttribute("errors");
         return "admin/merchant/add";
-    }
+}
 
     @PostMapping("/add")
     public String add(@Valid MerchantInputDTO merchant) throws Exception {

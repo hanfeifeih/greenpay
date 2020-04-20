@@ -18,7 +18,7 @@
                         <div class="layui-card-body" style="padding: 0">
                             <div class="admin-table_header">
                                 <div class="admin-table_header_left">
-                                    <button type="button" class="layui-btn">新增</button>
+                                    <a th:href="@{'/admin/system/user/add'}" class="layui-btn">新增</a>
                                     <button type="button" class="layui-btn">删除选中</button>
                                 </div>
                                 <div th:replace="admin/compose::admin-table_header_right('请输入用户名')">
@@ -27,7 +27,7 @@
                             </div>
                             <table id="demo" lay-filter="test"></table>
                             <script type="text/html" id="barDemo">
-                                <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                                <a th:href="@{'/admin/system/user/list/{{d.id}}/edit'}"  class="layui-btn layui-btn-xs">编辑</a>
                                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
                             </script>
                         </div>
@@ -39,10 +39,58 @@
     </div>
 </div>
 <th:block th:replace="admin/footer::script"/>
+
 <script th:inline="none">
-    !function(){
+
+    layui.use('table', function(){
         let layer = layui.layer
-            ,table = layui.table;
+            ,table = layui.table
+            ,$ = layui.jquery;
+
+        //监听工具条
+        table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            let data = obj.data; //获得当前行数据
+            let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            // var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+
+            if(layEvent === 'detail'){ //查看
+                //do somehing
+            } else if(layEvent === 'del'){ //删除
+
+                layer.confirm('确定要删除该用户吗？'+data.id, function(index){
+                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                    layer.close(index);
+                    //向服务端发送删除指令
+                    $.ajax({
+                        url:"/admin/api/v1/system/users/del",
+                        data:{'id':data.id},
+                        type:"Delete",
+                        // dataType:"json",
+                        success:function(data){
+                            console.log(data);
+                            layer.msg(data.msg);
+                            location.reload(); //删除成功后再刷新
+                        },
+                        error:function(data){
+                            $.messager.alert('错误',data.msg);
+                        }
+                    });
+
+                });
+            } else if(layEvent === 'edit'){ //编辑
+                //do something
+
+                //同步更新缓存对应的值
+                obj.update({
+                    username: '123'
+                    ,title: 'xxx'
+                });
+            } else if(layEvent === 'LAYTABLE_TIPS'){
+                layer.alert('Hi，头部工具栏扩展的右侧图标。');
+            }
+        });
+
+
         //第一个实例
         table.render({
             elem: '#demo'
@@ -64,12 +112,14 @@
                 {type: 'checkbox', fixed: 'left'}
                 ,{field: 'id', title: 'ID',width:100, unresize:true}
                 ,{field: 'username', title: '用户名', width:250, unresize:true}
+                ,{field: 'email', title: '邮箱', width:250, unresize:true}
                 ,{field: 'createdAt', title: '创建时间', width:180, unresize:true}
                 ,{field: 'updatedAt', title: '更新时间', width:180, unresize:true}
                 ,{fixed:'right',align: 'center', toolbar: '#barDemo', width:120}
             ]]
         });
-    }();
+
+    });
 </script>
 
 </body>
