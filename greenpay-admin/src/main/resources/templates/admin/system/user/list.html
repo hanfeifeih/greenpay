@@ -19,7 +19,7 @@
                             <div class="admin-table_header">
                                 <div class="admin-table_header_left">
                                     <a th:href="@{'/admin/system/user/add'}" class="layui-btn">新增</a>
-                                    <button type="button" class="layui-btn">删除选中</button>
+                                    <button type="button" class="layui-btn" lay-event="del">删除选中</button>
                                 </div>
                                 <div th:replace="admin/compose::admin-table_header_right('请输入用户名')">
                                 </div>
@@ -57,7 +57,7 @@
                 //do somehing
             } else if(layEvent === 'del'){ //删除
 
-                layer.confirm('确定要删除该用户吗？'+data.id, function(index){
+                layer.confirm('确定要删除该用户吗？', function(index){
                     obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                     layer.close(index);
                     //向服务端发送删除指令

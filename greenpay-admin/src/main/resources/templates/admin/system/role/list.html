@@ -18,8 +18,8 @@
                         <div class="layui-card-body" style="padding: 0">
                             <div class="admin-table_header">
                                 <div class="admin-table_header_left">
-                                    <button type="button" class="layui-btn">新增</button>
-                                    <button type="button" class="layui-btn">删除选中</button>
+                                    <a th:href="@{'/admin/system/role/add'}" class="layui-btn">新增</a>
+                                    <button type="button" class="layui-btn " lay-event="del">删除选中</button>
                                 </div>
                                 <div th:replace="admin/compose::admin-table_header_right('请输入角色名称')">
                                 </div>
@@ -27,7 +27,7 @@
                             </div>
                             <table id="demo" lay-filter="test"></table>
                             <script type="text/html" id="barDemo">
-                                <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                                <a th:href="@{'/admin/system/role/list/edit/{{d.id}}'}" class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
                                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
                             </script>
                         </div>
@@ -42,7 +42,42 @@
 <script th:inline="none">
     !function(){
         let layer = layui.layer
-            ,table = layui.table;
+            ,table = layui.table,
+            $ = layui.jquery;
+
+        //监听工具条
+        table.on('tool(test)',function (obj) {
+            let data = obj.data;
+            let layEvent = obj.event;
+
+            if(layEvent ==='datail'){//查看
+
+            }else if(layEvent === 'del'){
+                layer.confirm('确定要删除该角色吗', function (index) {
+                    obj.del();
+                    layer.close(index);
+                    $.ajax({
+                        url: "/admin/api/v1/system/roles/del",
+                        data: {'id': data.id},
+                        type: "Delete",
+                        success: function (data) {
+                            layer.msg(data.msg);
+                            location.reload();
+                        },
+                        error: function (data) {
+                            $.message.alert('错误', data.msg());
+                        }
+                    });
+                });
+
+            }else if(layEvent === 'edit'){
+
+            }else if (layEvent === 'LAYTABLE_TIPS') {
+                layer.alert('头部工具扩展右侧图标')
+
+            }
+        })
+
         //第一个实例
         table.render({
             elem: '#demo'
@@ -63,8 +98,8 @@
             ,cols: [[ //表头
                 {type: 'checkbox', fixed: 'left'}
                 ,{field: 'id', title: 'ID',width:100, unresize:true}
-                ,{field: 'name', title: '用户', width:250, unresize:true}
-                ,{field: 'roleCode', title: '角色代码', width:250, unresize:true}
+                ,{field: 'name', title: '角色', width:250, unresize:true}
+                ,{field: 'roleCodes', title: '角色代码', width:250, unresize:true}
                 ,{field: 'createdAt', title: '创建时间', width:180, unresize:true}
                 ,{field: 'updatedAt', title: '更新时间', width:180, unresize:true}
                 ,{fixed:'right',align: 'center', toolbar: '#barDemo', width:120}

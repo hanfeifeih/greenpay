@@ -1,6 +1,7 @@
 package com.esiran.greenpay.system.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.esiran.greenpay.common.entity.APIException;
 import com.esiran.greenpay.system.entity.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.esiran.greenpay.system.entity.UserRole;
@@ -17,5 +18,9 @@ import org.springframework.stereotype.Service;
  */
 public interface IRoleService extends IService<Role> {
 
+    Role selectById(Long id) throws APIException;
 
+    boolean save(UserRoleDto roleDto) throws APIException;
+
+    boolean edit(UserRoleDto roleDto) throws APIException;
 }

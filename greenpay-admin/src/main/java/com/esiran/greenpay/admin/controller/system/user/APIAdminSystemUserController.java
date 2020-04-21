@@ -1,4 +1,4 @@
-package com.esiran.greenpay.admin.controller.system;
+package com.esiran.greenpay.admin.controller.system.user;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

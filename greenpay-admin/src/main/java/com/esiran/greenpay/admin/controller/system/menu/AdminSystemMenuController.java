@@ -1,4 +1,4 @@
-package com.esiran.greenpay.admin.controller.system;
+package com.esiran.greenpay.admin.controller.system.menu;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

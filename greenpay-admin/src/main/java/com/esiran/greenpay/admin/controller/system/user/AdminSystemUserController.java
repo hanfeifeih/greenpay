@@ -1,5 +1,6 @@
-package com.esiran.greenpay.admin.controller.system;
+package com.esiran.greenpay.admin.controller.system.user;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.esiran.greenpay.common.entity.APIError;
 import com.esiran.greenpay.system.entity.User;
 import com.esiran.greenpay.system.entity.dot.UserDTO;
@@ -35,7 +36,10 @@ public class AdminSystemUserController {
 
 
     @GetMapping("/list/{userId}/edit")
-    public String edit(@PathVariable Integer userId, ModelMap modelMap) {
+    public String edit(HttpSession httpSession, ModelMap modelMap,@PathVariable Integer userId) {
+        List<APIError> apiErrors = (List<APIError>) httpSession.getAttribute("errors");
+        modelMap.addAttribute("errors", apiErrors);
+        httpSession.removeAttribute("errors");
         UserDTO user = userService.selectUserById(userId);
         modelMap.addAttribute("user", user);
         return "admin/system/user/edit";
@@ -43,7 +47,13 @@ public class AdminSystemUserController {
 
 
     @PostMapping("/list/{userId}/edit")
-    public String edit(@PathVariable Integer userId, UserInputDto userInputDto) {
+    public String edit(@PathVariable Integer userId, UserInputDto userInputDto) throws Exception {
+
+        if (StringUtils.isBlank(userInputDto.getUsername()) ||
+                StringUtils.isBlank(userInputDto.getEmail())) {
+
+              throw new Exception("用户名或Email为空");
+        }
         User user = userService.getById(userId);
         user.setUsername(userInputDto.getUsername());
         user.setEmail(userInputDto.getEmail());

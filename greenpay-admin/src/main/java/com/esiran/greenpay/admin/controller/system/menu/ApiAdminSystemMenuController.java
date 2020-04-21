@@ -1,4 +1,4 @@
-package com.esiran.greenpay.admin.controller.system;
+package com.esiran.greenpay.admin.controller.system.menu;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author han
- * @Package com.esiran.greenpay.admin.controller.system
- * @date 2020/4/18 10:25
  */
 @RestController
 @RequestMapping("/admin/api/v1/system/menu")

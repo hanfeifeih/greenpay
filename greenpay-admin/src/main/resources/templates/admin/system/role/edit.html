@@ -11,7 +11,7 @@
         <div th:replace="admin/side::menu"></div>
         <div class="layui-body">
             <div class="layadmin-tabsbody-item layui-show">
-                <div th:replace="admin/compose::layui-breadcrumb('系统管理','用户管理')"></div>
+                <div th:replace="admin/compose::layui-breadcrumb('系统管理','角色管理')"></div>
                 <div class="layui-card error-card" th:style="${errors==null}?'display:none;':''">
                     <div class="layui-card-body">
                         <blockquote class="layui-elem-quote" th:each="error:${errors}" th:text="${error.message}"></blockquote>
@@ -19,28 +19,28 @@
                 </div>
                 <div class="layui-fluid">
                     <div class="layui-card">
-                        <div class="layui-card-header">编辑用户</div>
+                        <div class="layui-card-header">编辑角色</div>
                         <div class="layui-card-body">
                             <form class="layui-form"  action="" method="post" novalidate>
                                 <div class="layui-row layui-form-item">
-                                    <label for="username" class="layui-form-label">用户名：</label>
+                                    <label for="name" class="layui-form-label">角色名称：</label>
                                     <div class="layui-input-block">
                                         <input type="text" class="layui-input"
-                                               name="username" id="username"
-                                               th:value="${user.username}"
+                                               name="name" id="name"
+                                               th:value="${role.name}"
                                                autocomplete="off"
-                                               placeholder="请输入用户名">
+                                               placeholder="角色名称">
                                     </div>
                                 </div>
 
                                 <div class="layui-form-item">
-                                    <label for="email" class="layui-form-label">电子邮箱：</label>
+                                    <label for="roleCode" class="layui-form-label">角色编码：</label>
                                     <div class="layui-input-block">
                                         <input type="text" class="layui-input"
-                                               name="email" id="email"
-                                               th:value="${user.email}"
+                                               name="roleCode" id="roleCode"
+                                               th:value="${role.roleCode}"
                                                autocomplete="off"
-                                               placeholder="请输入电子邮箱">
+                                               placeholder="请输入角色编码">
                                     </div>
                                 </div>
 
