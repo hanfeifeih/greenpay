@@ -1,28 +1,40 @@
 package com.esiran.greenpay.system.entity.dot;
 
 import com.esiran.greenpay.common.entity.BaseMapperEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author han
  */
 @Data
+@ApiModel("menuDto")
 public class MenuDTO extends BaseMapperEntity {
 
     /**
      * 菜单标题
      */
+    @ApiModelProperty("标题")
+    @NotBlank(message = "标题不能为空")
     private String title;
 
     /**
      * 菜单标识
      */
+    @ApiModelProperty("菜单标识")
+    @NotBlank(message = "标识不能为为空")
     private String mark;
 
     /**
      * 菜单类型（1:目录,2:菜单,3:按钮）
      */
-    private Boolean type;
+    @ApiModelProperty("菜单类型")
+    @NotNull(message = "类型不能为空")
+    private Integer type;
 
     /**
      * 目录图标
@@ -32,11 +44,15 @@ public class MenuDTO extends BaseMapperEntity {
     /**
      * 菜单路由
      */
+    @ApiModelProperty("菜单路由")
+    @NotBlank(message = "路由不能为空")
     private String path;
 
     /**
      * 上级菜单ID
      */
+    @ApiModelProperty("上级菜单ID")
+    @NotNull(message = "上级菜单ID不能为空")
     private Integer parentId;
 
     /**

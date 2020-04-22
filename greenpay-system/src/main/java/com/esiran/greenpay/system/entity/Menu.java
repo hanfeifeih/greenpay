@@ -26,6 +26,7 @@ public class Menu extends BaseMapperEntity {
     /**
      * 菜单标题
      */
+    @TableId (value = "id",type = IdType.AUTO)
     private String title;
 
     /**
@@ -36,7 +37,7 @@ public class Menu extends BaseMapperEntity {
     /**
      * 菜单类型（1:目录,2:菜单,3:按钮）
      */
-    private Boolean type;
+    private Integer type;
 
     /**
      * 目录图标

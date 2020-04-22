@@ -24,6 +24,7 @@
                             <div class="layui-row">
                                 <div class="layui-col-md12">
                                     <form class="layui-form" action="" method="post" novalidate>
+
                                         <div class="layui-row layui-form-item">
                                             <label for="name" class="layui-form-label">角色名称：</label>
                                             <div class="layui-input-block">
@@ -33,13 +34,12 @@
                                                        placeholder="请输入角色名称">
                                             </div>
                                         </div>
-                                        <div class="layui-form-item">
+
+                                        <div class="layui-form-item"  >
                                             <label for="roleCode" class="layui-form-label">角色编码：</label>
-                                            <div class="layui-input-block">
-                                                <input type="text" class="layui-input"
-                                                       name="roleCode" id="roleCode"
-                                                       autocomplete="off"
-                                                       placeholder="请输入角色编码">
+                                            <div class="layui-input-block" >
+                                                <div class="layui-card" id="roleCode"></div>
+
                                             </div>
                                         </div>
 
@@ -65,6 +65,39 @@
         let layer = layui.layer
             ,table = layui.table;
     }();
+
+    layui.use('tree', function(){
+        var tree = layui.tree;
+
+        //渲染
+        var inst1 = tree.render({
+            elem: '#roleCode'  //绑定元素
+            ,url:  ''
+            ,showCheckbox: true  //是否显示复选框
+            ,click: function(obj){
+                console.log(obj.data); //得到当前点击的节点数据
+                console.log(obj.state); //得到当前节点的展开状态：open、close、normal
+                console.log(obj.elem); //得到当前节点元素
+
+                console.log(obj.data.children); //当前节点下是否有子节点
+            }
+            ,data: [{
+                title: '江西' //一级菜单
+                ,children: [{
+                    title: '南昌' //二级菜单
+                    ,children: [{
+                        title: '高新区' //三级菜单
+                        //…… //以此类推，可无限层级
+                    }]
+                }]
+            },{
+                title: '陕西' //一级菜单
+                ,children: [{
+                    title: '西安' //二级菜单
+                }]
+            }]
+        });
+    });
 </script>
 
 </body>

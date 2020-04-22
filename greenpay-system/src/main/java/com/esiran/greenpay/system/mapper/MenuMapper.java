@@ -1,7 +1,12 @@
 package com.esiran.greenpay.system.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.esiran.greenpay.system.entity.Menu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.esiran.greenpay.system.entity.vo.MenuVo;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -12,5 +17,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2020-04-13
  */
 public interface MenuMapper extends BaseMapper<Menu> {
+    IPage<MenuVo> selectMenu(IPage<MenuVo> iPage, @Param(Constants.WRAPPER) Wrapper<MenuVo> wrapper);
+    MenuVo selectMenu(@Param(Constants.WRAPPER) Wrapper<MenuVo> wrapper);
 
 }

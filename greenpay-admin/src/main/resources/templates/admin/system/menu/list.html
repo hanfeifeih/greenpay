@@ -18,16 +18,15 @@
                         <div class="layui-card-body" style="padding: 0">
                             <div class="admin-table_header">
                                 <div class="admin-table_header_left">
-                                    <button type="button" class="layui-btn">新增</button>
-                                    <button type="button" class="layui-btn">删除选中</button>
+                                    <a th:href="@{'/admin/system/menu/add'}" class="layui-btn">新增</a>
                                 </div>
-                                <div th:replace="admin/compose::admin-table_header_right('请输入菜单名称')">
+                                <div th:replace="admin/compose::admin-table_header_right('请输入菜单名')">
                                 </div>
                                 <div style="clear:both;"></div>
                             </div>
                             <table id="demo" lay-filter="test"></table>
                             <script type="text/html" id="barDemo">
-                                <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                                <a th:href="@{'/admin/system/menu/list/{{d.id}}/edit'}"  class="layui-btn layui-btn-xs">编辑</a>
                                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
                             </script>
                         </div>
@@ -39,14 +38,62 @@
     </div>
 </div>
 <th:block th:replace="admin/footer::script"/>
+
 <script th:inline="none">
-    !function(){
+
+    layui.use('table', function(){
         let layer = layui.layer
-            ,table = layui.table;
+            ,table = layui.table
+            ,$ = layui.jquery;
+
+        //监听工具条
+        table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            let data = obj.data; //获得当前行数据
+            let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            // var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+
+            if(layEvent === 'detail'){ //查看
+                //do somehing
+            } else if(layEvent === 'del'){ //删除
+
+                layer.confirm('确定要删除该菜单吗？', function(index){
+                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                    layer.close(index);
+                    //向服务端发送删除指令
+                    $.ajax({
+                        url:"/admin/api/v1/system/menus/del",
+                        data:{'id':data.id},
+                        type:"Delete",
+                        // dataType:"json",
+                        success:function(data){
+                            console.log(data);
+                            layer.msg(data.msg);
+                            location.reload(); //删除成功后再刷新
+                        },
+                        error:function(data){
+                            $.messager.alert('错误',data.msg);
+                        }
+                    });
+
+                });
+            } else if(layEvent === 'edit'){ //编辑
+                //do something
+
+                //同步更新缓存对应的值
+                obj.update({
+                    username: '123'
+                    ,title: 'xxx'
+                });
+            } else if(layEvent === 'LAYTABLE_TIPS'){
+                layer.alert('Hi，头部工具栏扩展的右侧图标。');
+            }
+        });
+
+
         //第一个实例
         table.render({
             elem: '#demo'
-            ,url: '/admin/api/v1/system/menu' //数据接口
+            ,url: '/admin/api/v1/system/menus' //数据接口
             ,page: true //开启分页
             ,parseData: function(res){ //res 即为原始返回的数据
                 return {
@@ -62,20 +109,21 @@
             }
             ,cols: [[ //表头
                 {type: 'checkbox', fixed: 'left'}
-                ,{field: 'id', title: 'ID',width:100, unresize:true}
-                ,{field: 'title', title: '菜单标题', width:180, unresize:true}
-                ,{align: 'center', field: 'mark', title: '菜单标识', width:180, unresize:true}
-                ,{align: 'center', field: 'type', title: '菜单类型', width:180, unresize:true}
-                ,{field: 'icon', title: '目录图标', width:180, unresize:true}
-                ,{field: 'path', title: '菜单路由', width:180, unresize:true}
-                ,{field: 'parent_id', title: '上级菜单ID', width:100, unresize:true}
-                ,{field: 'sorts', title: '排序权重', width:100, unresize:true}
+                ,{field: 'id', title: 'ID',width:80, unresize:true}
+                ,{field: 'title', title: '菜单标题', width:120, unresize:true}
+                ,{field: 'mark', title: '菜单标识', width:120, unresize:true}
+                ,{field: 'type', title: '菜单类型', width:100, unresize:true}
+                ,{field: 'icon', title: '目录图标', width:100, unresize:true}
+                ,{field: 'path', title: '菜单路由', width:120, unresize:true}
+                ,{field: 'parentId', title: '上级菜单ID', width:100, unresize:true}
+                ,{field: 'extra', title: '排序权重', width:100, unresize:true}
                 ,{field: 'createdAt', title: '创建时间', width:180, unresize:true}
                 ,{field: 'updatedAt', title: '更新时间', width:180, unresize:true}
                 ,{fixed:'right',align: 'center', toolbar: '#barDemo', width:120}
             ]]
         });
-    }();
+
+    });
 </script>
 
 </body>
