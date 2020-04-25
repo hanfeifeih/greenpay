@@ -1,5 +1,6 @@
 package com.esiran.greenpay.system.entity.dot;
 
+import com.esiran.greenpay.common.entity.BaseMapperEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -12,7 +13,7 @@ import java.util.List;
  */
 @Data
 @ApiModel("RoleDto")
-public class UserRoleDto {
+public class UserRoleDto  extends BaseMapperEntity {
 
     /**
      * 角色名称
@@ -25,8 +26,13 @@ public class UserRoleDto {
      * 角色编码
      */
     @ApiModelProperty("角色编码")
-    @NotBlank(message = "角色编码不能为空")
     private String roleCode;
 
+    /**
+     * 角色
+     */
+    @ApiModelProperty("角色编码")
+    @NotBlank(message = "角色编码不能为空")
+    private String permIds;
 
 }

@@ -36,8 +36,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     private static  final ModelMapper modelMap = new ModelMapper();
 
     @Override
-    public ResponseEntity selectAllUserMenue(Page<MenuVo> iPage) {
-        QueryWrapper<MenuVo> queryWrapper = new QueryWrapper<>();
+    public ResponseEntity selectAllUserMenue(Page<Menu> iPage) {
+        QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
         IPage<MenuVo> menuIPage = this.baseMapper.selectMenu(iPage, queryWrapper );
         return ResponseEntity.status(HttpStatus.OK).body(menuIPage.getRecords());
     }

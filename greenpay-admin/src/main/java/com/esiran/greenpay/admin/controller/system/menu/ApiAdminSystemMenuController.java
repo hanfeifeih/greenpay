@@ -57,7 +57,7 @@ public class ApiAdminSystemMenuController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity all(Page<MenuVo> page) {
+    public ResponseEntity all(Page<Menu> page) {
         return iMenuService.selectAllUserMenue(page);
     }
 

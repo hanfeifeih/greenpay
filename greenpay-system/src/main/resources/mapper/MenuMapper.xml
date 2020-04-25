@@ -12,7 +12,7 @@
             <result property="type" column="type"/>
             <result property="icon" column="icon"/>
             <result property="path" column="path"/>
-            <result property="parentId" column="parentId"/>
+            <result property="parentId" column="parent_Id"/>
         </collection>
     </resultMap>
     <select id="selectMenu" resultMap="menuVo">
@@ -22,6 +22,7 @@ SELECT system_user.id AS userId,
 				system_user.email AS email,
 				system_role.name,
 				system_role.role_code,
+				system_menu.id,
 				system_menu.title,
 				system_menu.mark ,
 				system_menu.type ,
@@ -35,4 +36,5 @@ SELECT system_user.id AS userId,
 				LEFT JOIN system_menu	ON system_menu.id = system_role_menu.menu_id
 				      ${ew.customSqlSegment}
     </select>
+
 </mapper>

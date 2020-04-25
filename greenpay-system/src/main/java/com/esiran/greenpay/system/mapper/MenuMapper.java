@@ -17,7 +17,7 @@ import org.apache.ibatis.annotations.Param;
  * @since 2020-04-13
  */
 public interface MenuMapper extends BaseMapper<Menu> {
-    IPage<MenuVo> selectMenu(IPage<MenuVo> iPage, @Param(Constants.WRAPPER) Wrapper<MenuVo> wrapper);
+    IPage<MenuVo> selectMenu(IPage<Menu> iPage, @Param(Constants.WRAPPER) Wrapper<Menu> wrapper);
     MenuVo selectMenu(@Param(Constants.WRAPPER) Wrapper<MenuVo> wrapper);
 
 }

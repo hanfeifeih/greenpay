@@ -6,6 +6,7 @@ import com.esiran.greenpay.system.entity.Role;
 import com.esiran.greenpay.system.entity.dot.UserRoleDto;
 import com.esiran.greenpay.system.service.IRoleService;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -23,13 +25,26 @@ import java.util.List;
 public class AdminSystemRoleController {
     private IRoleService roleService;
 
+
     public AdminSystemRoleController(IRoleService roleService) {
         this.roleService = roleService;
     }
 
-    @GetMapping("/list")
-    public String list() {
-        return "admin/system/role/list";
+//    @GetMapping("/list")
+//    public String list() {
+//        return "admin/system/role/list";
+//    }
+
+    /**
+     * 跳转到角色列表
+     * @return
+     */
+    @RequestMapping("/list")
+    public ModelAndView toPage() {
+        ModelAndView modelAndView = new ModelAndView("admin/system/role/roleList");
+
+
+        return modelAndView;
     }
 
 
@@ -40,17 +55,12 @@ public class AdminSystemRoleController {
                 modelMap.addAttribute("errors", apiErrors);
                 httpSession.removeAttribute("errors");
         }
-        return "admin/system/role/add";
+        return "/admin/system/role/role";
     }
 
-    @PostMapping("/add")
-    public String add(@Valid UserRoleDto userRoleDto) throws Exception {
-        roleService.save(userRoleDto);
-        return "redirect:/admin/system/role/list";
-    }
 
     @GetMapping("/list/edit/{id}")
-    public String edit(HttpSession httpSession, ModelMap modelMap, @PathVariable Long id) throws APIException{
+    public String edit(@NotNull HttpSession httpSession, ModelMap modelMap, @PathVariable Long id) throws APIException{
         List<APIError> apiErrors = (List<APIError>) httpSession.getAttribute("errors");
         if (!CollectionUtils.isEmpty(apiErrors)) {
             modelMap.addAttribute("errors", apiErrors);
@@ -58,7 +68,7 @@ public class AdminSystemRoleController {
         }
         Role role = roleService.selectById(id);
         modelMap.addAttribute("role", role);
-        return "admin/system/role/edit";
+        return "admin/system/role/roleUpdate";
     }
 
     @PostMapping("/list/edit/{id}")

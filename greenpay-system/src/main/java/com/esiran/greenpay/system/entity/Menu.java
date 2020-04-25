@@ -26,7 +26,7 @@ public class Menu extends BaseMapperEntity {
     /**
      * 菜单标题
      */
-    @TableId (value = "id",type = IdType.AUTO)
+
     private String title;
 
     /**
