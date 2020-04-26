@@ -1,10 +1,12 @@
 /**
  * 权限列表
  */
-$(function() {
+let $ = layui.jquery;
+!(function () {
+
     //初始化treegrid 页面表格
     layui.config({
-        base: '../treegrid/'
+        base: '../../../treegrid/'
     }).use(['laytpl', 'treegrid'], function () {
         var laytpl = layui.laytpl,
             treegrid = layui.treegrid;
@@ -17,7 +19,7 @@ $(function() {
             elem: 'permTable',
             view: 'view',
             data: { rows: permList },
-            parentid: 'pid',
+            parentid: 'parentId',
             singleSelect: false
         });
         treeForm.build();
@@ -28,44 +30,73 @@ $(function() {
         var form = layui.form;
         //监听提交
         form.on('submit(permSubmit)', function(data){
-            $.ajax({
-                type: "POST",
-                data: $("#permForm").serialize(),
-                url: "/auth/setPerm",
-                success: function (data) {
-                    if (data == "ok") {
-                        layer.alert("操作成功",function(){
-                            layer.closeAll();
-                        });
-                    } else {
-                        layer.alert(data);
-                    }
-                },
-                error: function (data) {
-                    layer.alert("操作请求错误，请您稍后再试");
-                }
-            });
+            let style = data.field.style;
+            switch (style) {
+                case "0":
+                    $.ajax({
+                        type: "PUT",
+                        data: $("#permForm").serialize(),
+                        url: "/admin/api/v1/system/menus",
+                        success: function (data) {
+                            if (data == "ok") {
+                                layer.alert("操作成功",function(){
+                                    layer.closeAll();
+                                });
+                            } else {
+                                layer.alert(data);
+                            }
+                        },
+                        error: function (data) {
+                            layer.alert("操作请求错误，请您稍后再试");
+                        }
+                    });
+                    break;
+                case "1":
+                    $.ajax({
+                        type: "POST",
+                        data: $("#permForm").serialize(),
+                        url: "/admin/api/v1/system/menus",
+                        success: function (data) {
+                            if (data == "ok") {
+                                layer.alert("操作成功",function(){
+                                    layer.closeAll();
+                                });
+                            } else {
+                                layer.alert(data);
+                            }
+                        },
+                        error: function (data) {
+                            layer.alert("操作请求错误，请您稍后再试");
+                        }
+                    });
+                    break;
+                default:
+                    break;
+            }
+
             return false;
         });
         form.render();
     });
 
-});
 
+
+
+}());
 function edit(id,type){
     if(null!=id){
-        $("#type").val(type);
+        $("#style").val(type);
         $("#id").val(id);
-        $.get("/auth/getPerm",{"id":id},function(data) {
+        $.get("/admin/api/v1/system/menus/"+id,function(data) {
             // console.log(data);
             if(null!=data){
-                $("input[name='name']").val(data.name);
-                $("input[name='code']").val(data.code);
-                $("input[name='page']").val(data.page);
-                $("input[name='zindex']").val(data.zindex);
-                $("textarea[name='descpt']").text(data.descpt);
-                $("#pid").val(data.pid);
-                data.istype==0?$("input[name='istype']").val(0).checked:$("input[name='istype']").val(1).checked;
+                $("input[name='title']").val(data.title);
+                $("input[name='mark']").val(data.mark);
+                $("input[name='path']").val(data.path);
+                $("input[name='sorts']").val(data.sorts);
+                $("textarea[name='extra']").text(data.extra);
+                $("#parentId").val(data.parentId);
+                data.type==0?$("input[name='type']").val(0).checked:$("input[name='type']").val(1).checked;
                 layer.open({
                     type:1,
                     title: "更新权限",
@@ -85,17 +116,19 @@ function edit(id,type){
     }
 }
 //开通权限
-function addPerm(pid,flag){
-    if(null!=pid){
+function addPerm(parentId,flag){
+    if(null!=parentId){
         //flag[0:开通权限；1：新增子节点权限]
-        //type[0:编辑；1：新增]
+        //style[0:编辑；1：新增]
         if(flag==0){
             $("#type").val(1);
-            $("#pid").val(0);
+            $("#style").val(1);
+            $("#parentId").val(0);
         }else{
+            $("#type").val(2);
             //设置父id
-            $("#type").val(1);
-            $("#pid").val(pid);
+            $("#style").val(1);
+            $("#parentId").val(parentId);
         }
         layer.open({
             type:1,

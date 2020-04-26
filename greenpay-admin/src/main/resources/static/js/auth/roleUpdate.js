@@ -25,7 +25,8 @@
                 var node = checkedData[j];
                 let childs = getChildNode(node);
                 childs.push(node.id);
-                array.push(childs);
+                array.push(childs.concat());
+                nodeIds.length = 0;
             }
 
             //校验是否授权

@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -33,8 +35,13 @@ public class AdminSystemMenuController {
     }
 
     @GetMapping("/list")
-    public String list(){
-        return "admin/system/menu/list";
+    @ResponseBody
+    public ModelAndView list(){
+        ModelAndView modelAndView = new ModelAndView("admin/system/menu/permList");
+        List<Menu> list = iMenuService.list();
+        modelAndView.addObject("permList",list);
+        modelAndView.addObject("msg", "ok");
+        return modelAndView;
     }
 
     @GetMapping("/list/{menuId}/edit")

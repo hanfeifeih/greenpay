@@ -1,5 +1,6 @@
 package com.esiran.greenpay.admin.controller.system.role;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.esiran.greenpay.common.entity.APIException;
@@ -70,7 +71,9 @@ public class APIAdminSystemRoleController {
         String permIds = userRoleDto.getPermIds();
         String[] split = permIds.split(",");
         //删除已有的权限
-        roleMenuService.removeById(newRole.getId());
+        QueryWrapper<RoleMenu> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role_id", newRole.getId());
+        roleMenuService.remove(queryWrapper);
         //插入新的权限
         RoleMenu roleMenu = new RoleMenu();
         for (String s : split) {
@@ -102,6 +105,7 @@ public class APIAdminSystemRoleController {
 
     @ApiOperation("删除指定ID用户角色")
     @DeleteMapping("/del")
+    @Transactional
     public boolean del(@RequestParam Long id) throws APIException {
         if (id==null ||id <= 0) {
             throw new APIException("角色ID不正确","400");
@@ -110,6 +114,10 @@ public class APIAdminSystemRoleController {
         if (role == null) {
             throw new APIException("角色不存在","400");
         }
+        QueryWrapper<RoleMenu> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role_id", role.getId());
+        roleMenuService.remove(queryWrapper);
+
         return roleService.removeById(id);
     }
 
