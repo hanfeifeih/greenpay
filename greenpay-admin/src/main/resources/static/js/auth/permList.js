@@ -30,6 +30,7 @@ let $ = layui.jquery;
         var form = layui.form;
         //监听提交
         form.on('submit(permSubmit)', function(data){
+            // $("#type").val($("input[name='style']:checked").val());
             let style = data.field.style;
             switch (style) {
                 case "0":
@@ -83,9 +84,9 @@ let $ = layui.jquery;
 
 
 }());
-function edit(id,type){
+function edit(id,style){
     if(null!=id){
-        $("#style").val(type);
+        $("#style").val(style);
         $("#id").val(id);
         $.get("/admin/api/v1/system/menus/"+id,function(data) {
             // console.log(data);
@@ -96,7 +97,10 @@ function edit(id,type){
                 $("input[name='sorts']").val(data.sorts);
                 $("textarea[name='extra']").text(data.extra);
                 $("#parentId").val(data.parentId);
-                data.type==0?$("input[name='type']").val(0).checked:$("input[name='type']").val(1).checked;
+                // var sex = 2;
+                // $(":radio[name='rbsex'][value='" + sex + "']").prop("checked", "checked");
+                // data.type==0?$("input[name='style']").val(1).checked:$("input[name='style']").val(2).checked;
+                // console.log($("input[name='rbsex']:checked").val());
                 layer.open({
                     type:1,
                     title: "更新权限",
@@ -121,13 +125,12 @@ function addPerm(parentId,flag){
         //flag[0:开通权限；1：新增子节点权限]
         //style[0:编辑；1：新增]
         if(flag==0){
-            $("#type").val(1);
             $("#style").val(1);
             $("#parentId").val(0);
-        }else{
-            $("#type").val(2);
-            //设置父id
+        }else if(flag==1){
+            //添加子节点
             $("#style").val(1);
+            //设置父id
             $("#parentId").val(parentId);
         }
         layer.open({
@@ -151,21 +154,40 @@ function del(id,name){
         layer.confirm('您确定要删除'+name+'权限吗？', {
             btn: ['确认','返回'] //按钮
         }, function(){
-            $.post("/auth/del",{"id":id},function(data){
-                if(data=="ok"){
-                    //回调弹框
-                    layer.alert("删除成功！",function(){
-                        layer.closeAll();
-                        //加载load方法
-                        location.reload();;//自定义
-                    });
-                }else{
-                    layer.alert(data);//弹出错误提示
+            $.ajax({
+                type: "DELETE",
+                data: {'id': id},
+                url: "/admin/api/v1/system/menus/del",
+                success: function (data) {
+                    if (data) {
+                        layer.alert("操作成功",function(){
+                            layer.closeAll();
+                            location.reload();//自定义
+                        });
+                    } else {
+                        layer.alert(data);
+                    }
+                },
+                error: function (data) {
+                    layer.alert("操作请求错误，请您稍后再试");
                 }
             });
-        }, function(){
-            layer.closeAll();
         });
+        //     $.del("/admin/api/v1/system/menus/del",{"id":id},function(data){
+        //         if(data=="ok"){
+        //             //回调弹框
+        //             layer.alert("删除成功！",function(){
+        //                 layer.closeAll();
+        //                 //加载load方法
+        //                 location.reload();;//自定义
+        //             });
+        //         }else{
+        //             layer.alert(data);//弹出错误提示
+        //         }
+        //     });
+        // }, function(){
+        //     layer.closeAll();
+        // });
     }
 
 }

@@ -103,16 +103,16 @@ public class ApiAdminSystemMenuController {
 
 
     @DeleteMapping("/del")
-    public boolean del(@RequestParam Integer id) throws Exception{
+    public ResponseEntity del(@RequestParam Integer id) throws Exception{
         if (id <= 0) {
-            throw new Exception("用户ID不正确");
+            throw new Exception("菜单ID不正确");
         }
-        MenuDTO menuDTO = iMenuService.selectMenuById(id);
+        Menu menuDTO = iMenuService.getById(id);
         if (menuDTO == null) {
-            throw new Exception("用户不存在");
+            throw new Exception("菜单不存在");
         }
         iMenuService.removeById(id);
-        return true;
+        return ResponseEntity.status(HttpStatus.OK).body(true);
     }
 
 }
