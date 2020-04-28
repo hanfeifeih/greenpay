@@ -26,10 +26,11 @@ public interface IMenuService extends IService<Menu> {
 
     void addMenu(MenuDTO menuDTO) throws Exception;
 
-    MenuDTO selectMenuById(Integer userId) throws ApiException;
+    MenuDTO selectMenuById(Long userId) throws ApiException;
 
     ResponseEntity selectAllUserMenue(Page<Menu> iPage);
 
-    ResponseEntity selectMenuById(Long id);
+    ResponseEntity selectMenu(Integer id);
 
+     ResponseEntity selectMenuAll();
 }

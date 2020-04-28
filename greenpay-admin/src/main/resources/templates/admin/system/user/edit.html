@@ -27,20 +27,36 @@
                                     <div class="layui-input-block">
                                         <input type="text" class="layui-input"
                                                name="username" id="username"
+                                               lay-verify="required"
                                                th:value="${user.username}"
                                                autocomplete="off"
                                                placeholder="请输入用户名">
                                     </div>
                                 </div>
 
+
+
                                 <div class="layui-form-item">
                                     <label for="email" class="layui-form-label">电子邮箱：</label>
                                     <div class="layui-input-block">
-                                        <input type="text" class="layui-input"
+                                        <input type="email" class="layui-input"
                                                name="email" id="email"
+                                               lay-verify="required"
                                                th:value="${user.email}"
                                                autocomplete="off"
                                                placeholder="请输入电子邮箱">
+                                    </div>
+                                </div>
+
+                                <div class="layui-form-item">
+                                    <label for="password" class="layui-form-label">密码：</label>
+                                    <div class="layui-input-block">
+                                        <input type="password" class="layui-input"
+                                               name="password" id="password"
+                                               lay-verify="required"
+                                               th:value="${user.password}"
+                                               autocomplete="off"
+                                               placeholder="请输入密码">
                                     </div>
                                 </div>
 

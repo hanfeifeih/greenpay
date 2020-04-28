@@ -1,5 +1,6 @@
 package com.esiran.greenpay.admin.controller.system.menu;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.exceptions.ApiException;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -101,9 +102,14 @@ public class ApiAdminSystemMenuController {
         return iMenuService.selectAllUserMenue(page);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity all(){
+        return iMenuService.selectMenuAll();
+    }
 
     @DeleteMapping("/del")
-    public ResponseEntity del(@RequestParam Integer id) throws Exception{
+    public ResponseEntity del(@RequestParam Integer id) throws Exception {
+
         if (id <= 0) {
             throw new Exception("菜单ID不正确");
         }
@@ -112,6 +118,13 @@ public class ApiAdminSystemMenuController {
             throw new Exception("菜单不存在");
         }
         iMenuService.removeById(id);
+
+        //删除正面所有子节点
+        if (menuDTO.getParentId() == 0) {
+            QueryWrapper<Menu> menuQueryWrapper = new QueryWrapper<>();
+            menuQueryWrapper.eq("parent_id", menuDTO.getId());
+            iMenuService.remove(menuQueryWrapper);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(true);
     }
 

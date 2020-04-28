@@ -8,7 +8,6 @@
         let table = layui.table;
 
 
-
         table.render({
             elem: '#demo'
             ,url: '/admin/api/v1/system/roles' //数据接口
@@ -26,8 +25,7 @@
                 ,limitName: 'size'
             }
             ,cols: [[ //表头
-                {type: 'checkbox', fixed: 'left'}
-                ,{field: 'id', title: 'ID',width:'5%', unresize:true}
+                {field: 'id', title: 'ID',width:'5%', unresize:true , sort: true}
                 ,{field: 'name', title: '用户名', width:'15%', unresize:true}
                 ,{field: 'roleCode', title: '权限码', width:'25%', unresize:true}
                 ,{field: 'createdAt', title: '创建时间', width:'20%', unresize:true}

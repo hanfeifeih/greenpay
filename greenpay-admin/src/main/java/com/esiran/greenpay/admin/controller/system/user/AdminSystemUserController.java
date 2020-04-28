@@ -1,7 +1,10 @@
 package com.esiran.greenpay.admin.controller.system.user;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.esiran.greenpay.common.entity.APIError;
+import com.esiran.greenpay.common.entity.APIException;
 import com.esiran.greenpay.system.entity.User;
 import com.esiran.greenpay.system.entity.dot.UserDTO;
 import com.esiran.greenpay.system.entity.dot.UserInputDto;
@@ -36,7 +39,7 @@ public class AdminSystemUserController {
 
 
     @GetMapping("/list/{userId}/edit")
-    public String edit(HttpSession httpSession, ModelMap modelMap,@PathVariable Integer userId) {
+    public String edit(HttpSession httpSession, ModelMap modelMap,@PathVariable Integer userId) throws APIException {
         List<APIError> apiErrors = (List<APIError>) httpSession.getAttribute("errors");
         modelMap.addAttribute("errors", apiErrors);
         httpSession.removeAttribute("errors");
@@ -50,13 +53,38 @@ public class AdminSystemUserController {
     public String edit(@PathVariable Integer userId, UserInputDto userInputDto) throws Exception {
 
         if (StringUtils.isBlank(userInputDto.getUsername()) ||
-                StringUtils.isBlank(userInputDto.getEmail())) {
+                userInputDto.getUsername().length()<2) {
 
-              throw new Exception("用户名或Email为空");
+              throw new Exception("用户名格式不正确");
+        }
+        if (StringUtils.isBlank(userInputDto.getEmail())) {
+            throw new Exception("用户名或Email为空");
+        }
+        if (StringUtils.isBlank(userInputDto.getPassword())) {
+            throw new Exception("用户名密码格式不正确");
         }
         User user = userService.getById(userId);
+        LambdaQueryWrapper<User> queryWrapper ;
+        if (!user.getEmail().equals(userInputDto.getEmail())){
+            queryWrapper = new LambdaQueryWrapper<>();
+            LambdaQueryWrapper<User> eq = queryWrapper.like(User::getEmail, userInputDto.getEmail());
+            User u = userService.getOne(eq);
+            if (u != null ) {
+                throw new Exception("邮箱已经存在");
+            }
+        }
+        if (!user.getUsername().equals(userInputDto.getUsername())){
+            queryWrapper = new LambdaQueryWrapper<>();
+            LambdaQueryWrapper<User> eq = queryWrapper.like(User::getUsername, userInputDto.getUsername());
+            User u = userService.getOne(eq);
+            if (u != null ) {
+                throw new Exception("用户名已存在");
+            }
+        }
+
         user.setUsername(userInputDto.getUsername());
         user.setEmail(userInputDto.getEmail());
+        user.setPassword(userInputDto.getPassword());
         userService.updateById(user);
         return "redirect:/admin/system/user/list";
     }
@@ -69,13 +97,6 @@ public class AdminSystemUserController {
         modelMap.addAttribute("errors", apiErrors);
         httpSession.removeAttribute("errors");
         return "admin/system/user/add";
-    }
-
-
-    @PostMapping("/add")
-    public String add(@Valid UserInputDto userInputDto) throws Exception{
-        userService.addUser(userInputDto);
-        return "redirect:/admin/system/user/list";
     }
 
 

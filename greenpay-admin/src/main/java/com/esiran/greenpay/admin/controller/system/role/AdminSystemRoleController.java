@@ -7,6 +7,7 @@ import com.esiran.greenpay.system.entity.dot.UserRoleDto;
 import com.esiran.greenpay.system.service.IRoleService;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
@@ -39,10 +40,9 @@ public class AdminSystemRoleController {
      * 跳转到角色列表
      * @return
      */
-    @RequestMapping("/list")
+    @GetMapping("/list")
     public ModelAndView toPage() {
         ModelAndView modelAndView = new ModelAndView("admin/system/role/roleList");
-
 
         return modelAndView;
     }
@@ -60,13 +60,16 @@ public class AdminSystemRoleController {
 
 
     @GetMapping("/list/edit/{id}")
-    public String edit(@NotNull HttpSession httpSession, ModelMap modelMap, @PathVariable Long id) throws APIException{
+    public String edit(@NotNull HttpSession httpSession, ModelMap modelMap, @PathVariable Long id) throws Exception{
         List<APIError> apiErrors = (List<APIError>) httpSession.getAttribute("errors");
         if (!CollectionUtils.isEmpty(apiErrors)) {
             modelMap.addAttribute("errors", apiErrors);
             httpSession.removeAttribute("errors");
         }
         Role role = roleService.selectById(id);
+        if (role == null) {
+            throw new Exception("未找到角色");
+        }
         modelMap.addAttribute("role", role);
         return "admin/system/role/roleUpdate";
     }

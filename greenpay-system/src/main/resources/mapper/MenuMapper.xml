@@ -30,8 +30,8 @@ SELECT system_user.id AS userId,
 				system_menu.path,
 				system_menu.parent_id
 				FROM system_user
-				LEFT JOIN system_user_role ON system_user.id = system_user_role.role_id
-				LEFT JOIN system_role	ON system_user_role.id = system_role.id
+				LEFT JOIN system_user_role ON system_user.id = system_user_role.user_id
+				LEFT JOIN system_role	ON system_user_role.role_id = system_role.id
 				LEFT JOIN system_role_menu ON system_role.id = system_role_menu.role_id
 				LEFT JOIN system_menu	ON system_menu.id = system_role_menu.menu_id
 				      ${ew.customSqlSegment}

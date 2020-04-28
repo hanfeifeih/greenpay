@@ -42,4 +42,6 @@ public class User extends BaseMapperEntity {
      */
     private String email;
 
+
+
 }

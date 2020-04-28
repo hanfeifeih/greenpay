@@ -38,20 +38,31 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     @Override
     public ResponseEntity selectAllUserMenue(Page<Menu> iPage) {
         QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("parent_id", 0);
         IPage<MenuVo> menuIPage = this.baseMapper.selectMenu(iPage, queryWrapper );
         return ResponseEntity.status(HttpStatus.OK).body(menuIPage.getRecords());
     }
 
     @Override
-    public ResponseEntity selectMenuById(Long id) {
+    public ResponseEntity selectMenu(Integer id) {
         QueryWrapper<MenuVo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("system_user.id", id);
-        queryWrapper.orderByAsc("userId");
+        queryWrapper.eq("parent_id", 0);
         MenuVo menuVo = this.baseMapper.selectMenu(queryWrapper);
         menuVo.setTitles(buildMenuRoles(menuVo.getMenus()));
 
         return ResponseEntity.status(HttpStatus.OK).body(menuVo);
     }
+
+    @Override
+    public ResponseEntity selectMenuAll() {
+        QueryWrapper<MenuVo> queryWrapper = new QueryWrapper<>();
+        MenuVo menuVo = this.baseMapper.selectMenu(queryWrapper);
+        menuVo.setTitles(buildMenuRoles(menuVo.getMenus()));
+
+        return ResponseEntity.status(HttpStatus.OK).body(menuVo);
+    }
+
     private String buildMenuRoles(List<Menu> menus) {
         List<String> strings = menus.stream().map(item -> item.getTitle()).collect(Collectors.toList());
         StringBuilder stringBuilder = new StringBuilder();
@@ -70,7 +81,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
 
 
     @Override
-    public MenuDTO selectMenuById(Integer userId) throws ApiException {
+    public MenuDTO selectMenuById(Long userId) throws ApiException {
         Menu user = getById(userId);
         if (user == null) {
             throw new ApiException("菜单不存在");
@@ -89,5 +100,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
         }
         save(menu);
     }
+
+
 
 }

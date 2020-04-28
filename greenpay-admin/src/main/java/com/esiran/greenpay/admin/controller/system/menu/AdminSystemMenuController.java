@@ -45,7 +45,7 @@ public class AdminSystemMenuController {
     }
 
     @GetMapping("/list/{menuId}/edit")
-    public String edit(HttpSession httpSession, ModelMap modelMap, @PathVariable Integer menuId) {
+    public String edit(HttpSession httpSession, ModelMap modelMap, @PathVariable Long menuId) {
         List<APIError> apiErrors = (List<APIError>) httpSession.getAttribute("errors");
         modelMap.addAttribute("errors", apiErrors);
         httpSession.removeAttribute("errors");
